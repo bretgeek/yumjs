@@ -29,7 +29,7 @@ Feel free to download and try one of these minified versions:
 
 ## USAGE
 Load in your web app like:
-<script src='https://yourdomain.com/js/yum.min.js' ></script>
+<script async src='https://yourdomain.com/js/yum.min.js' ></script>
 
 
 ## More Usage Examples
