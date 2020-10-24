@@ -7,6 +7,9 @@ Please see https://yumjs.net for ongoing documentation, minified downloads and o
 
 Yum provides a familiar **procedural** and a **component** based syntax with low overhead and a slice of delicious reactivity when you need it.
 
+
+**Funding:** https://www.patreon.com/yumjs?fan_landing=true
+
 ## Goals
 
   -  Be simple, easy to learn with familiar syntax.
