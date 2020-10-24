@@ -1,8 +1,4 @@
-
-![GitHub Logo](/images/yumlogo.png)
-
-
-
+[![GitHub Logo](/images/yumlogo.png)](https://yumjs.net/)
 
 # YumJS
 YumJS is a small reactive JavaScript library with JQuery like syntax. 
