@@ -9,7 +9,7 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
 
   -  Be simple, easy to learn with familiar syntax.
   -  Complement and shorten JavaScript's syntax whenever possible.
-  -  Ability to subscribe to and make any element reactive.
+  -  Ability to subscribe to and make **any** element reactive.
   -  Be small, fast, lightweight and flexible.
   -  Built in Drag and Drop/swipe.
   -  Optional component syntax.
