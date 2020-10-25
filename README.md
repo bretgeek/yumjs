@@ -32,7 +32,7 @@ Feel free to download and try one of these minified versions:
 **Documentation** - in progress: https://yumjs.net/docs/
 
 
-##Build / minify
+## Build / minify
 There is a custom build/minify process that runs on https://yumjs.net and builds the drag and no drag versions. You should probably use those (linked above) but if you want to minify Yum yourself you can use **terser** https://github.com/terser/terser.
 
  
