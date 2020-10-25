@@ -45,11 +45,15 @@ terser --c -m -- yum.js >yum.min.js
 
 ## USAGE
 Load in your web app like:
+```javascript
 <script async src='https://yourdomain.com/js/yum.min.js' ></script>
+```
 
-
+### Starting
 You probably want to load your code when the document is ready like:
 
+
+```javascript
 <script>
 
 yum(document).ready( function(){
@@ -59,6 +63,6 @@ yum(document).ready( function(){
 });
 
 </script>
-
+```
 ## More Usage Examples
 See more examples at https://yumjs.net/
