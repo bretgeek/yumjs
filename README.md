@@ -2,6 +2,9 @@
 
 # YumJS
 YumJS is a small reactive JavaScript library with JQuery like syntax. 
+
+Small as in ~20KB minified with drag ~16KB minified without drag and about half of that if served gzipped.
+
 Please see https://yumjs.net for ongoing documentation, minified downloads and optional builds.
 
 
