@@ -48,5 +48,17 @@ Load in your web app like:
 <script async src='https://yourdomain.com/js/yum.min.js' ></script>
 
 
+You probably want to load your code when the document is ready like:
+
+<script>
+
+yum(document).ready( function(){
+
+ // do your stuff here
+
+});
+
+</script>
+
 ## More Usage Examples
 See more examples at https://yumjs.net/
