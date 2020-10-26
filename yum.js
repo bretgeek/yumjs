@@ -8,7 +8,6 @@ const yum = function(itr, ...Arr) {// itr = strings of things to iterate over
 
   // idk why anyone would want to do this but...
   if (typeof(itr) === 'function') {
-    // console.log('functor');
     itr();
     return this;
   }
