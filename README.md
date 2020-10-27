@@ -67,3 +67,6 @@ yum(document).ready( function(){
 ```
 ## More Usage Examples
 See more examples at https://yumjs.net/
+
+
+[![Stargazers repo roster for @bretgeek/yumjs](https://reporoster.com/stars/bretgeek/yumjs)](https://github.com/bretgeek/yumjs/stargazers)
