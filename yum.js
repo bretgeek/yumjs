@@ -1,4 +1,4 @@
-const yum = function(itr, ...Arr) {// itr = strings of things to iterate over
+function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   /* START GLOBAL VARS */
   // components can have non global yumobservers - see spy
