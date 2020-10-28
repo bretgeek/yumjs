@@ -7,7 +7,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   let itrtemp; // for saving itr
 
   // idk why anyone would want to do this but...
-  if (typeof(itr) === 'function') {
+   if(isFunction(itr)){
+    // console.log('functor');
     itr();
     return this;
   }
@@ -71,7 +72,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       })();
     }
 
-    if (typeof(itr) === 'string') {
+    if (isString(itr)) {
       itrtemp = itr;
       itr = itr.split(',');
       itr = itr.filter((x, i, a) => a.indexOf(x) == i);
@@ -127,7 +128,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       }
     }
 
-    if (typeof(sel) === 'string') {
+    if (isString(sel)) {
       sel = sel.split(',');
       for ( let s of sel ) {
         // console.log('s type is '+typeof(s));
@@ -201,7 +202,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   function _rect(el, st=false, round=false) {
     let e = el; // if el is object
-    if (typeof(el) === 'string') {
+    if (isString(el)) {
       e = document.querySelector(el);
     }
 
@@ -222,7 +223,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // Get Computed Styles of el
   function _cs(el, prop, trim=false) {
-    if (typeof(el) === 'string') {
+    if (isString(el)) {
       el = document.querySelector(el);
     }
     if (el) {
@@ -520,7 +521,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         const drp = _data(e.target, 'dropping', 'get');
         if (drp) {
           // console.log('GOT '+drp);
-          if (typeof(drpfn) === 'function') {
+          if(isFunction(drpfn)){
             // console.log('drpfn should run');
             if (dropped) {
               drpfn(dropped);
@@ -529,7 +530,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         }// end if drp
 
         if (!drp) {
-          if (typeof(lvupfn) === 'function') {
+          if(isFunction(lvupfn)){
             if (dropped) {
               lvupfn(dropped);
             }
@@ -786,7 +787,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               const drp = _data(e.target, 'dropping', 'get');
               if (drp) {
                 // console.log('Touch GOT '+drp);
-                if (typeof(drpfn) === 'function') {
+                if(isFunction(drpfn)){
                   // console.log('drpfn should run');
                   if (dropped) {
                     drpfn(dropped);
@@ -795,7 +796,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               }// end if drp
 
               if (!drp) {
-                if (typeof(lvupfn) === 'function') {
+                if(isFunction(lvupfn)){
                   if (dropped) {
                     lvupfn(dropped);
                   }
@@ -998,7 +999,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       return globalThis.location.pathname;
     }
 
-    if (typeof(dir) === 'string') {
+    if (isString(dir)) {
       if (dir.match(/^[?#&]/) ) {
         // console.log('hash '+dir);
         if (hash !== dir) {
@@ -1060,7 +1061,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             const sname = Object.keys(e.subscribers[i])[0];// subscriber name
            let el = e.subscribers[i].el;
             for (const o of watchers) {
-              if (typeof(o) === 'function') {
+                if(isFunction(o)){
                 if (watchProp === 'all' || watchProp == key) {
                 o( { data: value, name: sname, watch: watchProp, subscriber: el });
                 }
@@ -1270,7 +1271,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 
   function scrollTo(to) {
-    if (typeof(to) === 'string') {
+    if (isString(to)) {
       to = document.querySelectorAll(to)[0];
     } else {
       to = _stk[0];
@@ -1305,7 +1306,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   function attr(str, s=false, r=false) {
-    if (str && typeof(str === 'string')) {
+    if (str && isString(str)) {
       if (r) {
         for (y of _stk) {
           y.removeAttribute(str);
@@ -1428,7 +1429,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 
    function classToggle(str) {
-    if(typeof(str) === 'string'){
+    if (isString(str)) {
     for( let y of _stk){
     y.classList.toggle(str);
     }
@@ -1505,7 +1506,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   function __beforeOrAfter(str, p=false, I=false ) {
     for (y of _stk) {
-      if (typeof(str) === 'string') {
+    if (isString(str)) {
         // only append to first one found
         let to;
         if (__isHTML(str)) {
@@ -1560,7 +1561,7 @@ if(!str){
 }
     // console.log('type of str '+ typeof(str));
     for (y of _stk) {
-      if (typeof(str) === 'string') {
+    if (isString(str)) {
         // only append to first one found
         let el;
         if (__isHTML(str)) {
@@ -1618,7 +1619,7 @@ if(!str){
 
   function __To(str, p=false) {
     for (y of _stk) {
-      if (typeof(str) === 'string') {
+    if (isString(str)) {
         // only append to first one found
         const to = document.querySelectorAll(str)[0];
         if(!to){
@@ -1712,7 +1713,7 @@ if(!str){
       _stk = _stk.filter((x, i, a) => a.indexOf(x) == i);
       obj._ = _stk;// update _ function to reflect new _stk
       obj.first = _stk[0];
-      if (typeof(fn) === 'function') {
+      if(isFunction(fn)){
         for (y of _stk) {
           fn(y);
         }
@@ -1728,7 +1729,7 @@ if(!str){
   function children(str, fn=false) {
     // str can be comma delim list of selectors to match
     let starr=[];
-    if (typeof(str) === 'string') {
+    if (isString(str)) {
       starr = str.split(',');
     }
     // console.log('starr is '+starr);
@@ -1760,7 +1761,7 @@ if(!str){
       obj.first = _stk[0];
 
       // if a function was passed execute it for every element of the new stack
-      if (typeof(fn) === 'function') {
+      if(isFunction(fn)){
         for (y of _stk) {
           fn(y);
         }
@@ -1807,7 +1808,7 @@ if(!str){
       obj._ = _stk;
       obj.first = _stk[0];
       // if a function was passed execute it for every element of the new stack
-      if (typeof(fn) === 'function') {
+      if(isFunction(fn)){
         for (y of _stk) {
           fn(y);
         }
@@ -1826,7 +1827,7 @@ if(!str){
     for (y of _stk) {
       // console.log(str);
       if (y.matches(str)) {
-        if (typeof(fn) === 'function') {
+        if(isFunction(fn)){
           fn(y);
         }
       }
@@ -1979,6 +1980,13 @@ if(!str){
     return this;
   }
 
+function isString(variable) {
+      return typeof variable === "string";
+  }
+
+  function isFunction(variable) {
+      return typeof variable === "function";
+  }
 
   const obj = {
     first: _stk[0],
