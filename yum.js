@@ -19,7 +19,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // handle if itr itself is an object or a string
   if (itr) {
-    if (typeof(itr) === 'object') {
+    if(isObject(itr)){
     // can take an array of objects like [ obj, obj2];
       if (Array.isArray(itr)) {
         for ( let a of itr ) {
@@ -122,7 +122,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         }
       }
     }
-    if (typeof(sel) === 'object') {
+    if(isObject(sel)){
       if (sel.nodeType === 1) {
         _stk.push(sel);
       }
@@ -158,7 +158,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         clearInterval(docint);
         clearTimeout(tout);
         // console.log('ran and cleared in Intv and cleared timeout');
-        if (fn && typeof(fn === 'function') && inc <=1) { // dont run more than once per call
+        if (fn && isFunction(fn) && inc <=1) { // dont run more than once per call
           try {
             fn();
             inc++;
@@ -871,24 +871,24 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     // swipeleft etc
     let swipeleft;
     // if first param if false or function then it is a swipe
-    if (typeof(node) === 'function' || !node) {
+    if (isFunction(node) || !node) {
       swipe = true;
       if (node) { // if node is actual a function sent in then swipeleft function activated
         swipeleft = node;
       }
     }
     let swiperight;
-    if (drop && typeof(drop) === 'function' && swipe) {
+    if (drop && isFunction(drop) && swipe) {
       swiperight = drop;
     }
 
     var swipeup;
-    if (drpfn && typeof(drpfn) === 'function' && swipe) {
+    if (drpfn && isFunction(drpfn) && swipe) {
       swipeup = drpfn;
     }
 
     var swipeup;
-    if (lvupfn && typeof(lvupfn) === 'function' && swipe) {
+    if (lvupfn && isFunction(lvupfn) && swipe) {
       swipedown = lvupfn;
     }
 
@@ -1315,7 +1315,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       }
 
 
-      if (typeof(s) === 'string' || typeof(s) === 'number' ) {
+      if (isString(s) || typeof(s) === 'number' ) {
         for (y of _stk) {
           y.setAttribute(str, s);
         }
@@ -1534,7 +1534,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           }
         }
       }
-      if (typeof(str) === 'object' && str.nodeType == 1) {
+      if ( isObject(str) && str.nodeType == 1) {
         if (p) {
           if (I) {
             str.before(y);
@@ -1631,7 +1631,7 @@ if(!str){
           to.append(y);
         }
       }
-      if (typeof(str) === 'object' && str.nodeType == 1) {
+      if ( isObject(str) && str.nodeType == 1) {
         if (p) {
           str.prepend(y);
         } else {
@@ -1780,7 +1780,7 @@ if(!str){
   function find(str, fn=false) {
     const farr = [];// the found array
     let type = 's';
-    if (typeof(str) === 'object') {
+    if(isObject(str)){
       type = 'o';
     }
     for (y of _stk) {
@@ -1980,13 +1980,18 @@ if(!str){
     return this;
   }
 
-function isString(variable) {
-      return typeof variable === "string";
+function isString(thing) {
+      return typeof thing === "string";
   }
 
-  function isFunction(variable) {
-      return typeof variable === "function";
+  function isFunction(thing) {
+      return typeof thing === "function";
   }
+
+  function isObject(thing) {
+      return typeof thing === "object";
+  }
+
 
   const obj = {
     first: _stk[0],
