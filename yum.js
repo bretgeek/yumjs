@@ -2105,9 +2105,6 @@ class Yum {
       // set up the name property, if none specified used tag name if node type or id/class
 
       if (obj.name) {
-      // obj.name = obj.name.trim().replace(/\s/g, '-');
-      // obj.name = obj.name.replace(/-+/g,'-');
-      // obj.name = obj.name.replace(/[^a-z0-9-]+/gi, '');
         obj.name = yum()._singleDash(obj.name);
       }
 
