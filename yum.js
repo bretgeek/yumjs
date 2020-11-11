@@ -2002,7 +2002,9 @@ function isString(thing) {
       return _stk[0].getContext(str, obj);
       }else{
       return _stk[0].getContext(str);
-     }
+           }
+     }else{
+        throw new Error( 'First argument to yum is not an instance of canvas.' );
      }
    }
 
