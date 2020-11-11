@@ -1993,12 +1993,30 @@ function isString(thing) {
   }
 
 
+  function ctx(str='2d', obj=false) {
+  //obj can be context attributes see MDN
+    console.log(typeof(_stk[0]));
+    console.log('n name = '+_stk[0].nodeName);
+    if(_stk[0].tagName === 'CANVAS' || _stk[0].nodeName === 'CANVAS' || _stk[0]  instanceof HTMLCanvasElement ){
+      if(obj){
+      return _stk[0].getContext(str, obj);
+      }else{
+      return _stk[0].getContext(str);
+     }
+     }
+   }
+
+
+
+
+
   const obj = {
     first: _stk[0],
     _: _stk,
     _getstack: _getstack,
     _createNode: _createNode,
     css: css,
+    ctx: ctx,
     data: data,
     parents: parents,
     parent: parent,
