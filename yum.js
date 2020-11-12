@@ -441,6 +441,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     for (y of _stk) {
       // console.log('stack');
       for (t of types) {
+       t = t.trim();
         y.addEventListener(t, handler, userCap);
       }
     }
