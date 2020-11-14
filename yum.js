@@ -1,5 +1,4 @@
 function yum(itr, ...Arr) {// itr = strings of things to iterate over
-
   /* START GLOBAL VARS */
   // components can have non global yumobservers - see spy
   globalThis.yumobservers = globalThis.yumobservers || {};
@@ -7,7 +6,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   let itrtemp; // for saving itr
 
   // idk why anyone would want to do this but...
-   if(isFunction(itr)){
+  if (isFunction(itr)) {
     // console.log('functor');
     itr();
     return this;
@@ -19,10 +18,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // handle if itr itself is an object or a string
   if (itr) {
-    if(isObject(itr)){
+    if (isObject(itr)) {
     // can take an array of objects like [ obj, obj2];
       if (Array.isArray(itr)) {
-        for ( let a of itr ) {
+        for ( const a of itr ) {
           if (a.nodeType === 1) {
             _stk.push(a);
           }
@@ -33,7 +32,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           // not sure why itr has to be an array even if it is onle one object
           // crazy hack to get one selector object passed in to work
           const tempitr = [itr];
-          for (a of tempitr) {
+          for (let a of tempitr) {
             if (a.nodeType === 1) {
               _stk.push(a);
             }
@@ -76,7 +75,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       itrtemp = itr;
       itr = itr.split(',');
       itr = itr.filter((x, i, a) => a.indexOf(x) == i);
-      for (s of itr) {
+      for (let s of itr) {
         // console.log('s type is '+typeof(s));
         if (__isHTML(s)) {
           // console.log('s is html '+s);
@@ -97,12 +96,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             const cn = s.replace(/./, '');
             els = document.getElementsByClassName(cn);
             // console.log('cn is '+s);
-            for (el of els) {
+            for (var el of els) {
               _stk.push(el);
             }
           } else {
             els = document.querySelectorAll(s);
-            for (el of els) {
+            for ( var el of els) {
               _stk.push(el);
             }
           }
@@ -114,15 +113,15 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for (sel of Arr) {
+  for (var sel of Arr) {
     if (Array.isArray(sel)) {
-      for ( let a of sel ) {
+      for (var a of sel ) {
         if (a.nodeType === 1) {
           _stk.push(a);
         }
       }
     }
-    if(isObject(sel)){
+    if (isObject(sel)) {
       if (sel.nodeType === 1) {
         _stk.push(sel);
       }
@@ -130,11 +129,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
     if (isString(sel)) {
       sel = sel.split(',');
-      for ( let s of sel ) {
+      for (var s of sel ) {
         // console.log('s type is '+typeof(s));
 
         const els = document.querySelectorAll(s);
-        for ( let el of els) {
+        for (var el of els) {
           if (el.nodeType === 1) {
             _stk.push(el);
           }
@@ -244,7 +243,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     let res = '';
     if (!str && limit==='all') {
       // console.log('stk len' + _stk.length);
-      for (y of _stk) {
+      for ( const y of _stk) {
         res += y.innerHTML;
       }
       return res;
@@ -260,7 +259,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     let res = '';
     if (!str && limit==='all') {
       // console.log('stk len' + _stk.length);
-      for (y of _stk) {
+      for ( const y of _stk) {
         res += y.textContent;
       }
       return res;
@@ -274,7 +273,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function __htxt(str, limit='all', t=false ) {
     const content = '';
     let inc = 0;
-    for (y of _stk) {
+    for ( const y of _stk) {
       if (__isNum(limit) && inc <= limit) {
         // console.log('limit '+ inc);
         inc++;
@@ -361,7 +360,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   /* DELAY execute function for every element after a delay, fn takes in */
   function delay(wait=500, fn) {
     setTimeout((t) => {
-      for (y of _stk) {
+      for ( const y of _stk) {
         fn(y);
       }
       // console.log('delayed');
@@ -376,7 +375,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   function hidkbd(el) {
     if (!el) {
-      for ( let el of _stk) {
+      for ( const el of _stk) {
         setTimeout(function() {
           el.onfocus = blur(); // close the keyboard
         }, 100);
@@ -438,10 +437,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
     // note do e.preventDefault() in the handlier
     const types = etype.split(',');
-    for (y of _stk) {
+    for ( const y of _stk) {
       // console.log('stack');
-      for (t of types) {
-       t = t.trim();
+      for ( let t of types) {
+        t = t.trim();
         y.addEventListener(t, handler, userCap);
       }
     }
@@ -462,8 +461,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     const types = etype.split(',');
-    for (y of _stk) {
-      for (t of types) {
+    for ( const y of _stk) {
+      for ( const t of types) {
         y.removeEventListener(t, handler, userCap);
       }
     }
@@ -522,7 +521,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         const drp = _data(e.target, 'dropping', 'get');
         if (drp) {
           // console.log('GOT '+drp);
-          if(isFunction(drpfn)){
+          if (isFunction(drpfn)) {
             // console.log('drpfn should run');
             if (dropped) {
               drpfn(dropped);
@@ -531,7 +530,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         }// end if drp
 
         if (!drp) {
-          if(isFunction(lvupfn)){
+          if (isFunction(lvupfn)) {
             if (dropped) {
               lvupfn(dropped);
             }
@@ -788,7 +787,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               const drp = _data(e.target, 'dropping', 'get');
               if (drp) {
                 // console.log('Touch GOT '+drp);
-                if(isFunction(drpfn)){
+                if (isFunction(drpfn)) {
                   // console.log('drpfn should run');
                   if (dropped) {
                     drpfn(dropped);
@@ -797,7 +796,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               }// end if drp
 
               if (!drp) {
-                if(isFunction(lvupfn)){
+                if (isFunction(lvupfn)) {
                   if (dropped) {
                     lvupfn(dropped);
                   }
@@ -1023,7 +1022,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     newroute = dir+'/';
 
     if (args.length) {
-      for (r of args) {
+      for ( const r of args) {
         if (r.match(/^[?#&]/) ) {
           newroute += r;
         } else {
@@ -1047,7 +1046,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     } else {
       prop = 'atom';
     }
-    for ( let e of _stk) {
+    for ( const e of _stk) {
       // Initialize the reactor on every component's data prop
       e.subscribers = [];
 
@@ -1060,11 +1059,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             const watchers = Object.values(e.subscribers[i]);
             const watchProp = e.subscribers[i].watch; // property we are watching
             const sname = Object.keys(e.subscribers[i])[0];// subscriber name
-           let el = e.subscribers[i].el;
+            const el = e.subscribers[i].el;
             for (const o of watchers) {
-                if(isFunction(o)){
+              if (isFunction(o)) {
                 if (watchProp === 'all' || watchProp == key) {
-                o( { data: value, name: sname, watch: watchProp, subscriber: el });
+                  o( {data: value, name: sname, watch: watchProp, subscriber: el});
                 }
               }
             }
@@ -1082,13 +1081,13 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   //  for external use
   function ReactTo(obj, ob, localProp, externalProp = false) {
-     if(_stk.length){
-    for ( let y of _stk) {
-      _ReactTo(obj, ob, localProp, externalProp, y);
-    }
-      }else{
+    if (_stk.length) {
+      for ( const y of _stk) {
+        _ReactTo(obj, ob, localProp, externalProp, y);
+      }
+    } else {
       _ReactTo(obj, ob, localProp, externalProp );
-     } 
+    }
 
     return this;
   }
@@ -1126,7 +1125,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // this trigger will trigger the event for all on the stack
   function trigger(e) {
-    for (y of _stk) {
+    for ( const y of _stk) {
       const ev = new Event(e);
       el.dispatchEvent(ev, {'bubbles': true, 'cancelable': true} );
     }
@@ -1202,7 +1201,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
     // disconnect all
     if (name === 'all') {
-      for (o in yumobservers) {
+      for ( const o in yumobservers) {
         // console.log('disconnecting all');
         yumobservers[o].disconnect();
       }
@@ -1211,7 +1210,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       let kinc = -1;
       // console.log('the keys' + ykeys);
 
-      for (o of ykeys) {
+      for ( const o of ykeys) {
         if (o.startsWith(name) ) {
           kinc++;
           // console.log('unspying '+name+kinc);
@@ -1309,7 +1308,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function attr(str, s=false, r=false) {
     if (str && isString(str)) {
       if (r) {
-        for (y of _stk) {
+        for ( const y of _stk) {
           y.removeAttribute(str);
         }
         return this;
@@ -1317,7 +1316,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 
       if (isString(s) || typeof(s) === 'number' ) {
-        for (y of _stk) {
+        for ( const y of _stk) {
           y.setAttribute(str, s);
         }
         return this;
@@ -1348,7 +1347,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function css(str, append = false) {
     if (!append && !str) {
       let style;
-      for (y of _stk) {
+      for ( const y of _stk) {
         style += __dumpCSS(y);
         // console.log('css for '+y);
       }
@@ -1358,11 +1357,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
     if (!append) {
     // console.log(str);
-      for (y of _stk) {
+      for ( const y of _stk) {
         y.style.cssText = y.style.cssText + str;
       }
     } else {
-      for (y of _stk) {
+      for ( const y of _stk) {
         y.style.cssText = str;
       }
     }
@@ -1398,7 +1397,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     spd = 1000 / spd;
     const intv = setInterval( (e) => {
       const ready = true;
-      for (y of _stk) {
+      for ( const y of _stk) {
         let op;
         if (t) {
           y.style.display = dtype;
@@ -1429,17 +1428,17 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
 
-   function classToggle(str) {
+  function classToggle(str) {
     if (isString(str)) {
-    for( let y of _stk){
-    y.classList.toggle(str);
+      for ( const y of _stk) {
+        y.classList.toggle(str);
+      }
     }
-    }
-   return this;
-    }
+    return this;
+  }
 
   function toggle(dtype='block', d = false) {
-    for ( let s of _stk) {
+    for ( const s of _stk) {
       if (!s.matches('body')) { // no toggling on the body in case the selector is invalid
         let hid = false;
 
@@ -1506,8 +1505,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 
   function __beforeOrAfter(str, p=false, I=false ) {
-    for (y of _stk) {
-    if (isString(str)) {
+    for ( const y of _stk) {
+      if (isString(str)) {
         // only append to first one found
         let to;
         if (__isHTML(str)) {
@@ -1556,13 +1555,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // APPEND
   function append(str, p=false) {
-
-if(!str){
-    return this;
-}
+    if (!str) {
+      return this;
+    }
     // console.log('type of str '+ typeof(str));
-    for (y of _stk) {
-    if (isString(str)) {
+    for ( const y of _stk) {
+      if (isString(str)) {
         // only append to first one found
         let el;
         if (__isHTML(str)) {
@@ -1590,18 +1588,18 @@ if(!str){
 
   // PREPEND
   function prepend(str) {
-if(!str){
-    return this;
-}
+    if (!str) {
+      return this;
+    }
     append(str, true);
     return this;
   }
 
   // APPENDTO AND PREPENDTO
   function prependTo(str) {
-if(!str){
-    return this;
-}
+    if (!str) {
+      return this;
+    }
 
 
     __To(str, true);
@@ -1610,22 +1608,22 @@ if(!str){
 
 
   function appendTo(str, p=false) {
-if(!str){
-    return this;
-}
+    if (!str) {
+      return this;
+    }
 
     __To(str);
     return this;
   }
 
   function __To(str, p=false) {
-    for (y of _stk) {
-    if (isString(str)) {
+    for ( const y of _stk) {
+      if (isString(str)) {
         // only append to first one found
         const to = document.querySelectorAll(str)[0];
-        if(!to){
-        return this;
-         }
+        if (!to) {
+          return this;
+        }
         if (p) {
           to.prepend(y);
         } else {
@@ -1644,7 +1642,7 @@ if(!str){
   }
 
   function show() {
-    for (y of _stk) {
+    for ( const y of _stk) {
       y.style.visibility = 'visible';
       if (getComputedStyle(y).display === 'none') {
         y.style.display = 'block';
@@ -1654,7 +1652,7 @@ if(!str){
   }
 
   function hide() {
-    for (y of _stk) {
+    for ( const y of _stk) {
       y.style.visibility = 'hidden';
     }
     return this;
@@ -1664,7 +1662,7 @@ if(!str){
   // PARENT for each element in the stack put each direct parent on the stack and subsequent chains will act on the parent/s - if You want to return the collection chain with ._
   function parent() {
     let nstk = [];// the new stack
-    for (y of _stk) {
+    for ( const y of _stk) {
       nstk.push(y.parentElement);
     // console.log(y.parentElement.classList);
     }
@@ -1688,7 +1686,7 @@ if(!str){
 
 
     if (matchsel) {
-      for (y of _stk) {
+      for ( const y of _stk) {
         let els = y;
         while (els = els.parentElement) {
           if (els.matches(matchsel)) {
@@ -1699,7 +1697,7 @@ if(!str){
     }
 
     if (!matchsel) {
-      for (y of _stk) {
+      for ( const y of _stk) {
         let els = y;
         while (els = els.parentElement) {
           nstk.push(els);
@@ -1714,8 +1712,8 @@ if(!str){
       _stk = _stk.filter((x, i, a) => a.indexOf(x) == i);
       obj._ = _stk;// update _ function to reflect new _stk
       obj.first = _stk[0];
-      if(isFunction(fn)){
-        for (y of _stk) {
+      if (isFunction(fn)) {
+        for ( const y of _stk) {
           fn(y);
         }
       }
@@ -1735,12 +1733,12 @@ if(!str){
     }
     // console.log('starr is '+starr);
     const carr = [];// the children array
-    for (y of _stk) {
+    for ( const y of _stk) {
       const c = y.children;// a collections of child nodes for each item on the stack;
       // each item on the stacks children are pushed to carr array
       for (let i = 0; i < c.length; i++) {
         if (starr.length) {
-          for (a of starr) {
+          for ( const a of starr) {
             if (c[i].matches(a)) {
               carr.push(c[i]);
               // console.log(c[i].classList);
@@ -1762,8 +1760,8 @@ if(!str){
       obj.first = _stk[0];
 
       // if a function was passed execute it for every element of the new stack
-      if(isFunction(fn)){
-        for (y of _stk) {
+      if (isFunction(fn)) {
+        for ( const y of _stk) {
           fn(y);
         }
       }
@@ -1781,21 +1779,21 @@ if(!str){
   function find(str, fn=false) {
     const farr = [];// the found array
     let type = 's';
-    if(isObject(str)){
+    if (isObject(str)) {
       type = 'o';
     }
-    for (y of _stk) {
+    for ( const y of _stk) {
       // fn(y);
       if (type !== 'o') {
         const sel = y.querySelectorAll(str);
-        for (s of sel) {
+        for ( const s of sel) {
           // console.log(s.classList);
           farr.push(s);
         }
       }// end is selector
       // if an actual object element was sent in
       else {
-        for (y of _stk) {
+        for ( const y of _stk) {
           if (y.contains(str)) {
             farr.push(str);
           }
@@ -1809,8 +1807,8 @@ if(!str){
       obj._ = _stk;
       obj.first = _stk[0];
       // if a function was passed execute it for every element of the new stack
-      if(isFunction(fn)){
-        for (y of _stk) {
+      if (isFunction(fn)) {
+        for ( const y of _stk) {
           fn(y);
         }
       }
@@ -1825,10 +1823,10 @@ if(!str){
 
   // FOREVERY
   function forEvery(str, fn) {
-    for (y of _stk) {
+    for ( const y of _stk) {
       // console.log(str);
       if (y.matches(str)) {
-        if(isFunction(fn)){
+        if (isFunction(fn)) {
           fn(y);
         }
       }
@@ -1838,14 +1836,14 @@ if(!str){
 
   // EACH
   function each(fn) {
-    for (y of _stk) {
+    for ( const y of _stk) {
       fn(y);
     }
     return this;
   }
 
   function detach() {
-    for (y of _stk) {
+    for ( const y of _stk) {
       y.remove();
     }
     return this;
@@ -1854,7 +1852,7 @@ if(!str){
 
   // addClass
   function addClass(s, r=false) {
-    for (y of _stk) {
+    for ( const y of _stk) {
       if (!r) {
         y.classList.add(s);
       } else {
@@ -1871,18 +1869,12 @@ if(!str){
   }
 
   // PLUGIN
-  function plug(fn, r=false) {
+  function plug(fn) {
     // is true the return the result of an function passed in (could be yums too)-  This lets the function assign plugvar to something valuable. Note: using this prevents further chains from running
-    const plugvar = 'yum';
-    if (r) {
-      const res = fn(y, plugvar);
-      return res;
-    } else {
-      for (y of _stk) {
-        fn(y);
-      }
-      return this;
+    for (const x of _stk) {
+      fn(x);
     }
+    return this;
   }
 
   // same as plug but without plugvar and return value ret
@@ -1895,7 +1887,7 @@ if(!str){
   /*
   // a TEMPLATE for future use
   function template() {
-    for (y of _stk) {
+    for ( let y of _stk) {
       // console.log(y.classList);
     }
     return this;
@@ -1918,7 +1910,6 @@ if(!str){
   /* END STACK TOOLS */
 
 
-
   // replace multiple dashes with one
   function _singleDash(str) {
     str = str.trim().replace(/\s/g, '-');
@@ -1935,7 +1926,7 @@ if(!str){
   }
   // DATA
   function data(name, data=false) {
-    for (y of _stk) {
+    for ( const y of _stk) {
       if (!y.data) {
         y.data = {};
       }
@@ -1968,7 +1959,7 @@ if(!str){
         // retrieve the named data
         const res = [];
         const keys = Object.keys(y.data);
-        for (k of keys) {
+        for ( const k of keys) {
           //  console.log('DATA NAME: '+k);
           if (k === nm) {
             res.push(y.data[k]);
@@ -1981,36 +1972,33 @@ if(!str){
     return this;
   }
 
-function isString(thing) {
-      return typeof thing === "string";
+  function isString(thing) {
+    return typeof thing === 'string';
   }
 
   function isFunction(thing) {
-      return typeof thing === "function";
+    return typeof thing === 'function';
   }
 
   function isObject(thing) {
-      return typeof thing === "object";
+    return typeof thing === 'object';
   }
 
 
   function ctx(str='2d', obj=false) {
-  //obj can be context attributes see MDN
+  // obj can be context attributes see MDN
     console.log(typeof(_stk[0]));
     console.log('n name = '+_stk[0].nodeName);
-    if(_stk[0].tagName === 'CANVAS' || _stk[0].nodeName === 'CANVAS' || _stk[0]  instanceof HTMLCanvasElement ){
-      if(obj){
-      return _stk[0].getContext(str, obj);
-      }else{
-      return _stk[0].getContext(str);
-           }
-     }else{
-        throw new Error( 'First argument to yum is not an instance of canvas.' );
-     }
-   }
-
-
-
+    if (_stk[0].tagName === 'CANVAS' || _stk[0].nodeName === 'CANVAS' || _stk[0] instanceof HTMLCanvasElement ) {
+      if (obj) {
+        return _stk[0].getContext(str, obj);
+      } else {
+        return _stk[0].getContext(str);
+      }
+    } else {
+      throw new Error( 'First argument to yum is not an instance of canvas.' );
+    }
+  }
 
 
   const obj = {
@@ -2130,7 +2118,6 @@ class Yum {
       obj.cssPrefix = '.'+obj.name;
 
 
-     
       // set up obj.el as the object now instead of the selector for less diving
       obj.el = entry;
 
@@ -2193,7 +2180,7 @@ class Yum {
       return dt;
     })();
 
-        if (obj.reset) {
+    if (obj.reset) {
       const clone = entry.cloneNode(true);
       obj.reset = function() {
         entry.replaceWith(clone);
@@ -2228,14 +2215,14 @@ class Yum {
           const watchers = Object.values(obj.subscribers[i]);
           const watchProp = obj.subscribers[i].watch; // property we are watching
           const sname = Object.keys(obj.subscribers[i])[0];// subscriber name
-          let el = obj.subscribers[i].el; // This is who called it from yum(el).ReactTo
-           // console.log('SNAME '+sname);
-           // console.log('SUBSCRIBER'+el);
+          const el = obj.subscribers[i].el; // This is who called it from yum(el).ReactTo
+          // console.log('SNAME '+sname);
+          // console.log('SUBSCRIBER'+el);
           for (const o of watchers) {
             // console.log( 'SUBSCRIBER is '+ typeof(o));
             if (typeof(o) === 'function') {
               if (watchProp === 'all' || watchProp == key) {
-                o( { data: value, name: sname, watch: watchProp, subscriber: el });
+                o( {data: value, name: sname, watch: watchProp, subscriber: el});
               }
             }
           }
@@ -2244,17 +2231,17 @@ class Yum {
       },
     };
     const react = new Proxy({}, obj.reactor);
-    //obj.data = react;//using atom to keep data separate
+    // obj.data = react;//using atom to keep data separate
     obj['atom'] = react;
 
     if (obj.init && typeof(obj.init) === 'function') {
       // calling document ready makes sure that init waits for the page to be loaded in case other components are referenced in init before the are actually loaded
       yum(document).ready(function() {
-       try{
-        obj.init(obj);
-       }catch(e){
-    console.log(e);
-       }
+        try {
+          obj.init(obj);
+        } catch (e) {
+          console.log(e);
+        }
       });
     } else {
       obj.init = () => {
