@@ -113,9 +113,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for (var sel of Arr) {
+  for ( var sel of Arr) {
     if (Array.isArray(sel)) {
-      for (var a of sel ) {
+      for ( var a of sel ) {
         if (a.nodeType === 1) {
           _stk.push(a);
         }
@@ -129,11 +129,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
     if (isString(sel)) {
       sel = sel.split(',');
-      for (var s of sel ) {
+      for ( var s of sel ) {
         // console.log('s type is '+typeof(s));
 
         const els = document.querySelectorAll(s);
-        for (var el of els) {
+        for ( var el of els) {
           if (el.nodeType === 1) {
             _stk.push(el);
           }
@@ -1060,7 +1060,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             const watchProp = e.subscribers[i].watch; // property we are watching
             const sname = Object.keys(e.subscribers[i])[0];// subscriber name
             const el = e.subscribers[i].el;
-            for (const o of watchers) {
+            for ( const o of watchers) {
               if (isFunction(o)) {
                 if (watchProp === 'all' || watchProp == key) {
                   o( {data: value, name: sname, watch: watchProp, subscriber: el});
@@ -1112,7 +1112,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     const inc = 0;
     const narr = [];
     // console.log('prop '+ prop);
-    for (const s of obj.subscribers) {
+    for ( const s of obj.subscribers) {
       if (name in s && s.watch === prop) {
         obj.subscribers.splice(s, 1);
         // console.log('S Watch '+s.watch);
@@ -1163,7 +1163,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 
     const target = _stk;
-    for (let i = 0; i < target.length; i++) {
+    for ( let i = 0; i < target.length; i++) {
       //  console.log('spying '+name+i );
       const e = target[i];
       // create an observer instance
@@ -1334,7 +1334,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function __dumpCSS(el) {
     let s = '';
     const o = getComputedStyle(el);
-    for (let i = 0; i < o.length; i++) {
+    for ( let i = 0; i < o.length; i++) {
       if (o.getPropertyValue(o[i]).length) {
         s+=o[i] + ':' + o.getPropertyValue(o[i])+';';
       }
