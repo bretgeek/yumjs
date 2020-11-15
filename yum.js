@@ -32,7 +32,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           // not sure why itr has to be an array even if it is onle one object
           // crazy hack to get one selector object passed in to work
           const tempitr = [itr];
-          for (let a of tempitr) {
+          for ( const a of tempitr ) {
             if (a.nodeType === 1) {
               _stk.push(a);
             }
@@ -75,7 +75,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       itrtemp = itr;
       itr = itr.split(',');
       itr = itr.filter((x, i, a) => a.indexOf(x) == i);
-      for (let s of itr) {
+      for ( const s of itr ) {
         // console.log('s type is '+typeof(s));
         if (__isHTML(s)) {
           // console.log('s is html '+s);
@@ -96,12 +96,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             const cn = s.replace(/./, '');
             els = document.getElementsByClassName(cn);
             // console.log('cn is '+s);
-            for (var el of els) {
+            for ( const el of els ) {
               _stk.push(el);
             }
           } else {
             els = document.querySelectorAll(s);
-            for ( var el of els) {
+            for ( const el of els ) {
               _stk.push(el);
             }
           }
@@ -113,9 +113,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for ( var sel of Arr) {
+  for ( const sel of Arr ) {
     if (Array.isArray(sel)) {
-      for ( var a of sel ) {
+      for ( const a of sel ) {
         if (a.nodeType === 1) {
           _stk.push(a);
         }
@@ -129,11 +129,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
     if (isString(sel)) {
       sel = sel.split(',');
-      for ( var s of sel ) {
+      for ( const s of sel ) {
         // console.log('s type is '+typeof(s));
 
         const els = document.querySelectorAll(s);
-        for ( var el of els) {
+        for ( const el of els) {
           if (el.nodeType === 1) {
             _stk.push(el);
           }
@@ -360,7 +360,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   /* DELAY execute function for every element after a delay, fn takes in */
   function delay(wait=500, fn) {
     setTimeout((t) => {
-      for ( const y of _stk) {
+      for ( const y of _stk ) {
         fn(y);
       }
       // console.log('delayed');
@@ -375,7 +375,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   function hidkbd(el) {
     if (!el) {
-      for ( const el of _stk) {
+      for ( const el of _stk ) {
         setTimeout(function() {
           el.onfocus = blur(); // close the keyboard
         }, 100);
@@ -437,9 +437,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
     // note do e.preventDefault() in the handlier
     const types = etype.split(',');
-    for ( const y of _stk) {
+    for ( const y of _stk ) {
       // console.log('stack');
-      for ( let t of types) {
+      for ( let t of types ) {
         t = t.trim();
         y.addEventListener(t, handler, userCap);
       }
@@ -461,8 +461,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     const types = etype.split(',');
-    for ( const y of _stk) {
-      for ( const t of types) {
+    for ( const y of _stk ) {
+      for ( const t of types ) {
         y.removeEventListener(t, handler, userCap);
       }
     }
@@ -1022,7 +1022,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     newroute = dir+'/';
 
     if (args.length) {
-      for ( const r of args) {
+      for ( const r of args ) {
         if (r.match(/^[?#&]/) ) {
           newroute += r;
         } else {
@@ -1046,21 +1046,21 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     } else {
       prop = 'atom';
     }
-    for ( const e of _stk) {
+    for ( const e of _stk ) {
       // Initialize the reactor on every component's data prop
       e.subscribers = [];
 
       e.reactor = {
         set: function(target, key, value) {
           //  console.log(`The property ${prop}.${key} on ${e.tagName} has been updated with ${value}`);
-          for (let i=0; i< e.subscribers.length; i++) {
+          for ( let i=0; i< e.subscribers.length; i++ ) {
             // console.log(e.subscribers[i]);
             const reactees = Object.keys(e.subscribers[i]);
             const watchers = Object.values(e.subscribers[i]);
             const watchProp = e.subscribers[i].watch; // property we are watching
             const sname = Object.keys(e.subscribers[i])[0];// subscriber name
             const el = e.subscribers[i].el;
-            for ( const o of watchers) {
+            for ( const o of watchers ) {
               if (isFunction(o)) {
                 if (watchProp === 'all' || watchProp == key) {
                   o( {data: value, name: sname, watch: watchProp, subscriber: el});
@@ -1082,7 +1082,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   //  for external use
   function ReactTo(obj, ob, localProp, externalProp = false) {
     if (_stk.length) {
-      for ( const y of _stk) {
+      for ( const y of _stk ) {
         _ReactTo(obj, ob, localProp, externalProp, y);
       }
     } else {
@@ -1112,8 +1112,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     const inc = 0;
     const narr = [];
     // console.log('prop '+ prop);
-    for ( const s of obj.subscribers) {
-      if (name in s && s.watch === prop) {
+    for ( const s of obj.subscribers ) {
+      if ( name in s && s.watch === prop ) {
         obj.subscribers.splice(s, 1);
         // console.log('S Watch '+s.watch);
         // console.log('NAME  is IN '+name)
@@ -1125,9 +1125,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // this trigger will trigger the event for all on the stack
   function trigger(e) {
-    for ( const y of _stk) {
+    for ( const y of _stk ) {
       const ev = new Event(e);
-      el.dispatchEvent(ev, {'bubbles': true, 'cancelable': true} );
+      y.dispatchEvent(ev, {'bubbles': true, 'cancelable': true} );
     }
     return this;
   }
@@ -1871,7 +1871,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // PLUGIN
   function plug(fn) {
     // is true the return the result of an function passed in (could be yums too)-  This lets the function assign plugvar to something valuable. Note: using this prevents further chains from running
-    for (const x of _stk) {
+    for ( const x of _stk) {
       fn(x);
     }
     return this;
