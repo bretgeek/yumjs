@@ -113,7 +113,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for ( const sel of Arr ) {
+  for ( let sel of Arr ) {
     if (Array.isArray(sel)) {
       for ( const a of sel ) {
         if (a.nodeType === 1) {
