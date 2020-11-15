@@ -113,7 +113,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for ( let sel of Arr ) {
+  for ( let sel of Arr ) { // let instead of cont because sel gets mutated  below sel = sel.split(','); TODO fix
+
     if (Array.isArray(sel)) {
       for ( const a of sel ) {
         if (a.nodeType === 1) {
@@ -439,7 +440,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     const types = etype.split(',');
     for ( const y of _stk ) {
       // console.log('stack');
-      for ( let t of types ) {
+      for ( let t of types ) { // TODO fix let here instead of const because t is immediately mutated
         t = t.trim();
         y.addEventListener(t, handler, userCap);
       }
@@ -1870,7 +1871,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // PLUGIN
   function plug(fn) {
-    // is true the return the result of an function passed in (could be yums too)-  This lets the function assign plugvar to something valuable. Note: using this prevents further chains from running
     for ( const x of _stk) {
       fn(x);
     }
