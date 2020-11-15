@@ -1769,8 +1769,14 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     if (!carr.length) {
-      return false; // you must return here to stop the chain in case no elements are found. that way the stack is not affected
-    }
+     //return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
+     // instead of returning false create a fake node but never add it to the document it so chaining still works
+     let faux = _createNode('span');
+     _stk = [faux];
+     obj._ = _stk;
+     obj.first = _stk[0];
+     faux.remove();
+     }
 
     return this;
   }
@@ -1816,8 +1822,14 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     if (!farr.length) {
-      return false; // you must return here to stop the chain in case no elements are found. that way the stack is not affected
-    }
+    //return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
+     // instead of returning false create a fake node but never add it to the document it so chaining still works
+     let faux = _createNode('span');
+     _stk = [faux];
+     obj._ = _stk;
+     obj.first = _stk[0];
+     faux.remove();
+     }
     return this;
   }
 
