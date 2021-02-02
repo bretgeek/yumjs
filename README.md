@@ -16,7 +16,7 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
 ## Goals
 
   -  Be simple, easy to learn with familiar syntax.
-  -  Act as a lightweight JQuery replacement (not all JQuery functions implemented).
+  -  Act as a lightweight alternative to JQuery (not all JQuery functions implemented).
   -  Complement and shorten JavaScript's syntax whenever possible.
   -  Ability to subscribe to and make **any** element reactive.
   -  Be small, fast, lightweight and flexible.
