@@ -114,7 +114,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
   for ( let sel of Arr ) { // let instead of cont because sel gets mutated  below sel = sel.split(','); TODO fix
-
     if (Array.isArray(sel)) {
       for ( const a of sel ) {
         if (a.nodeType === 1) {
@@ -1769,14 +1768,14 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     if (!carr.length) {
-     //return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
-     // instead of returning false create a fake node but never add it to the document it so chaining still works
-     let faux = _createNode('span');
-     _stk = [faux];
-     obj._ = _stk;
-     obj.first = _stk[0];
-     faux.remove();
-     }
+      // return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
+      // instead of returning false create a fake node but never add it to the document it so chaining still works
+      const faux = _createNode('span');
+      _stk = [faux];
+      obj._ = _stk;
+      obj.first = _stk[0];
+      faux.remove();
+    }
 
     return this;
   }
@@ -1822,14 +1821,14 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     if (!farr.length) {
-    //return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
-     // instead of returning false create a fake node but never add it to the document it so chaining still works
-     let faux = _createNode('span');
-     _stk = [faux];
-     obj._ = _stk;
-     obj.first = _stk[0];
-     faux.remove();
-     }
+    // return false; // this was set to stop the stack being changed when no children were found but that causes errors so..
+      // instead of returning false create a fake node but never add it to the document it so chaining still works
+      const faux = _createNode('span');
+      _stk = [faux];
+      obj._ = _stk;
+      obj.first = _stk[0];
+      faux.remove();
+    }
     return this;
   }
 
@@ -2012,12 +2011,54 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
   }
 
+  function _useState(str) {
+    const f = function(str) {
+      return str;
+    };
+    return [str, f];
+  }
+
+
+  function _render(fn, to='body', pos, props='I am props') {
+    // check if function
+    let h;
+    if (isFunction(fn)) {
+      h = fn(to);
+      h.fn = function(props) {
+        console.log(props);
+      };
+    } else {
+      return;
+    }
+
+    // switch for pos
+    switch (pos) {
+      case 'after':
+        yum(h).insertAfter(to);
+        break;
+
+      case 'before':
+        yum(h).insertBefore(to);
+        break;
+
+      case 'prepend':
+        yum(h).prependTo(to);
+        break;
+
+      default:
+        yum(h).appendTo(to);
+        break;
+    }
+    return;
+  }
 
   const obj = {
     first: _stk[0],
     _: _stk,
     _getstack: _getstack,
     _createNode: _createNode,
+    _useState: _useState,
+    _render: _render,
     css: css,
     ctx: ctx,
     data: data,
@@ -2086,180 +2127,3 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   return obj;
 };
-
-// For component syntax with new Yum() - components have built in Reactors
-class Yum {
-  constructor(obj) {
-    const entry = yum(obj.el).first;
-    // yob is local yumobserver
-
-    obj.data = 'initial';
-    const date = new Date();
-    let dt = date.getTime();
-    // add another random string onto dt
-    const prer = Math.random().toString(36).substring(2, 8);
-    const pstr = Math.random().toString(36).substring(2, 6);
-    // console.log('prefix random is  '+prer);
-    // console.log('postfix random is  '+pstr);
-    dt = 'y'+prer+dt+pstr;
-    obj.yob = {};
-
-    if (typeof(entry) === 'object' && entry.nodeType == 1) {
-      // set up the name property, if none specified used tag name if node type or id/class
-
-      if (obj.name) {
-        obj.name = yum()._singleDash(obj.name);
-      }
-
-      if (!obj.name) {
-        if (typeof(obj.el) === 'object' && entry.nodeType == 1) {
-          obj.name = dt;
-          // console.log(obj.name);
-        } else {
-          if (obj.el.startsWith('#')) {
-            obj.name = obj.el.toString().replace(/[#]/, '');
-          } else {
-            obj.name = dt;
-          }
-        }
-      }
-
-      //  console.log('NAME IS '+obj.name);
-
-      obj.scope = dt;
-      obj.cssPrefix = '.'+obj.name;
-
-
-      // set up obj.el as the object now instead of the selector for less diving
-      obj.el = entry;
-
-
-      // style property
-      if (obj.style) {
-        const style = document.createElement('style');
-        style.textContent = obj.style();
-        obj.el.prepend(style);
-      }
-
-
-      // if a template was used parse it for scripts and recreate the scripts, add them to the dom so they will run
-      if (obj.template) {
-        if (typeof(obj.template) === 'function') {
-          yum(entry).html(obj.template());
-        } else {
-          yum(entry).html(obj.template);
-        }
-        const scripts = yum(entry).find('script')._;
-        if (scripts && scripts.length) {
-          // console.log('template found');
-          scripts.forEach((s) => {
-          // console.log('found a script');
-            const ns = yum()._createNode('script');
-            if (s.src) {
-              ns.src = s.src;
-              // get data- attrs of script
-              for ( let i = 0; i < s.attributes.length; i++) {
-                const dat = s.attributes[i].name;
-                const val = s.attributes[i].value;
-                if (dat.match(/^data-/)) {
-                  // console.log('data: '+dat+ ' value: '+val);
-                  ns.setAttribute(dat, val);
-                }
-              }
-            } else {
-              ns.textContent = s.textContent;
-              // console.log(s.textContent);
-            }
-            s.remove();
-            // this.el.appendChild(ns);
-            yum(ns).appendTo(entry);
-          });
-        }
-      }
-
-      if (obj.name) {
-        yum(entry).attr('data-scope', `${obj.scope.replace(/ /, '-').trim()}`);
-        yum(entry).addClass(`${obj.name.replace(/ /, '-').trim()}`);
-      }
-    }
-
-
-    // change scope to function for out side of document ready when init is not called
-    obj.scope = (function() {
-      return dt;
-    })();
-    obj.cssPrefix = (function() {
-      return dt;
-    })();
-
-    if (obj.reset) {
-      const clone = entry.cloneNode(true);
-      obj.reset = function() {
-        entry.replaceWith(clone);
-      };
-    } else {
-      obj.reset = () => {
-        return;
-      };
-    }
-
-    // subscribe to reactors - run each property label that starts with with reactor if it is a function
-    const reactTos = Object.keys(obj);
-    for (const r of reactTos) {
-      if (r.startsWith('reactTo')) {
-        // console.log('R '+r);
-        if (typeof(obj[r]) === 'function') {
-          // console.log('R is '+r);
-          obj[r]();
-        }
-      }
-    }
-
-
-    // Initialize the reactor on every component's data prop
-    obj.subscribers = [];
-    obj.reactor = {
-      set: function(target, key, value) {
-        // console.log(`The property "${key}" on "${obj.name}" "${value}"  - ${key} has been updated with ${value}`);
-        for (let i=0; i< obj.subscribers.length; i++) {
-          // console.log(obj.subscribers[i]);
-          const reactees = Object.keys(obj.subscribers[i]);
-          const watchers = Object.values(obj.subscribers[i]);
-          const watchProp = obj.subscribers[i].watch; // property we are watching
-          const sname = Object.keys(obj.subscribers[i])[0];// subscriber name
-          const el = obj.subscribers[i].el; // This is who called it from yum(el).ReactTo
-          // console.log('SNAME '+sname);
-          // console.log('SUBSCRIBER'+el);
-          for (const o of watchers) {
-            // console.log( 'SUBSCRIBER is '+ typeof(o));
-            if (typeof(o) === 'function') {
-              if (watchProp === 'all' || watchProp == key) {
-                o( {data: value, name: sname, watch: watchProp, subscriber: el});
-              }
-            }
-          }
-        }
-        return true;
-      },
-    };
-    const react = new Proxy({}, obj.reactor);
-    // obj.data = react;//using atom to keep data separate
-    obj['atom'] = react;
-
-    if (obj.init && typeof(obj.init) === 'function') {
-      // calling document ready makes sure that init waits for the page to be loaded in case other components are referenced in init before the are actually loaded
-      yum(document).ready(function() {
-        try {
-          obj.init(obj);
-        } catch (e) {
-          console.log(e);
-        }
-      });
-    } else {
-      obj.init = () => {
-        return;
-      };// in case someone calls init without it being there
-    }
-    return obj;
-  }
-}
