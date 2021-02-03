@@ -1064,6 +1064,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               if (isFunction(o)) {
                 if (watchProp === 'all' || watchProp == key) {
                   o( {data: value, name: sname, watch: watchProp, subscriber: el});
+                  // expost the value to the element
+                  e.data = value;
                 }
               }
             }
