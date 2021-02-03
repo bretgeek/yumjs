@@ -2011,15 +2011,18 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
   }
 
-
-  function _render(fn, to='body', pos, props='I am props') {
+  // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
+  function _render(fn, to='body', { pos='append', reactor=false, r='atom'} ) {
     // check if function
     let h;
     if (isFunction(fn)) {
       h = fn(to);
-      h.fn = function(props) {
-        console.log(props);
-      };
+
+    if(reactor){
+    console.log('reactor activated');
+    yum(h).Reactor(r);
+    }
+
     } else {
       return;
     }
