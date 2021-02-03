@@ -2011,13 +2011,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
   }
 
-  function _useState(str) {
-    const f = function(str) {
-      return str;
-    };
-    return [str, f];
-  }
-
 
   function _render(fn, to='body', pos, props='I am props') {
     // check if function
@@ -2057,7 +2050,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     _: _stk,
     _getstack: _getstack,
     _createNode: _createNode,
-    _useState: _useState,
     _render: _render,
     css: css,
     ctx: ctx,
