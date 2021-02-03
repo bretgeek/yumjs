@@ -2012,20 +2012,30 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
-  function _render(fn, to='body', { pos='append', reactor=false, r='atom'} ) {
+  function _render(fn, to='body', { pos='append', reactor=false, state='state', initState=false,  } ) {
     // check if function
     let h;
     if (isFunction(fn)) {
-      h = fn(to);
-
+      h = fn();// returns the html
+     // console.log('app name is '+fn.name);
     if(reactor){
-    console.log('reactor activated');
-    yum(h).Reactor(r);
+    yum(h).Reactor();
     }
 
     } else {
       return;
     }
+
+    if (isFunction(h.react)) {
+     yum(h).ReactTo(h, fn.name, h.react, state);
+    if(initState === 0){
+     h.atom.state = 0;
+      }
+    // dont run this if 0 was passed in 
+    if(initState){
+     h.atom.state = initState;
+     }
+     }
 
     // switch for pos
     switch (pos) {
