@@ -1066,6 +1066,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
                   o( {data: value, name: sname, watch: watchProp, subscriber: el});
                   // expost the value to the element
                   e.data = value;
+                  e.subscriber = el;
                 }
               }
             }
