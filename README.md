@@ -3,7 +3,7 @@
 # YumJS
 YumJS is a small reactive JavaScript library with JQuery like syntax. 
 
-Small as in ~20KB minified with drag ~16KB minified without drag and about half of that if served gzipped.
+Small as in ~19KB minified with drag ~15KB minified without drag and about half of that if served gzipped.
 
 Please see https://yumjs.net for ongoing documentation, minified downloads and optional builds.
 
@@ -16,12 +16,12 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
 ## Goals
 
   -  Be simple, easy to learn with familiar syntax.
+  -  Optional component syntax.
   -  Act as a lightweight alternative to JQuery (not all JQuery functions implemented).
   -  Complement and shorten JavaScript's syntax whenever possible.
   -  Ability to subscribe to and make **any** element reactive.
   -  Be small, fast, lightweight and flexible.
   -  Built in Drag and Drop/swipe.
-  -  Optional component syntax.
   -  Be open source and extendable with intuitive plugin system.
   -  Encourage less DOM diving.
     
