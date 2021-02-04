@@ -2024,7 +2024,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
-  function _render(fn, to='body', { pos='append', reactor=true, state='state', initState=false, props=false } = 'nada' ) {
+  function _render(fn, to='body', { pos='append', reactor=true, state='state', initState=false, addClass=false, props=false, } = 'nada' ) {
  
      let position = 'append';
 
@@ -2037,6 +2037,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     if (isFunction(fn)) {
       h = fn(props);// returns the html
      // console.log('app name is '+fn.name);
+     if(addClass){
+     yum(h).addClass(fn.name);
+     }
+
     if(reactor){
     yum(h).Reactor();
     }
