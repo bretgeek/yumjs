@@ -2016,7 +2016,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
-  function _render(fn, to='body', { pos='append', reactor=false, state='state', initState=false, props=false } ) {
+  function _render(fn, to='body', { pos='append', reactor=true, state='state', initState=false, props=false } ) {
     // check if function
     let h;
     if (isFunction(fn)) {
