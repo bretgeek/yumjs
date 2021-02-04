@@ -1993,6 +1993,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function isFunction(thing) {
     return typeof thing === 'function';
   }
+  
 
   function isObject(thing) {
     return typeof thing === 'object';
@@ -2088,6 +2089,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     ReactTo: ReactTo,
     Reactor: Reactor,
     _Route: _Route,
+    isFunction: isFunction,
     unReact: unReact,
     scroller: scroller,
     scrollTo: scrollTo,
