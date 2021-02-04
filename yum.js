@@ -2036,7 +2036,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     let h;
     if (isFunction(fn)) {
       h = fn(props);// returns the html
-     // console.log('app name is '+fn.name);
+
      if(addClass){
      yum(h).addClass(fn.name);
      }
