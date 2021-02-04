@@ -2049,6 +2049,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       return;
     }
 
+
+    if (!isFunction(h.react) && initState) {
+     h.react = function() { console.log('initState property found but no el.react function')  };
+    } 
+
+
     if (isFunction(h.react)) {
      yum(h).ReactTo(h, fn.name, h.react, state);
     if(initState === 0){
