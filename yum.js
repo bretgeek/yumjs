@@ -1371,62 +1371,23 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function fadeOut(spd='fast', dtype='block') {
-    fade(spd, dtype, false);
+
+  function fadeOut(delay=500) {
+   setTimeout(t => {
+    for(const y of _stk){
+    yum(y).css(`visibility: hidden; opacity: 0; transition: visibility 0s 2s, opacity 2s linear;`);
+    }
+    }, delay)
     return this;
   }
 
 
-  function fadeIn(spd='fast', dtype='block') {
-    fade(spd, dtype, true);
-    return this;
-  }
-
-  // t = true to fade in
-  function fade(spd='fast', dtype='block', t=false, single=false) {
-    if (single) {
-      _stk = single;// fade in this singular node if passed in
+  function fadeIn(delay=500) {
+   setTimeout(t => {
+    for(const y of _stk){
+    yum(y).css(`visibility: visible; opacity: 1; transition: opacity 2s linear;`);
     }
-
-    if (spd === 'fast') {
-      spd = 20;
-    }
-    if (spd === 'slow') {
-      spd = 1;
-    }
-    if (spd > 20) {
-      spd = 20;
-    }
-    spd = 1000 / spd;
-    const intv = setInterval( (e) => {
-      const ready = true;
-      for ( const y of _stk) {
-        let op;
-        if (t) {
-          y.style.display = dtype;
-          op = Number(y.style.opacity) + 0.1;
-          y.style.visibility = 'visible';
-          y.style.opacity = op;
-          if (op > 1) {
-            op = 1;
-            clearInterval(intv);
-          }
-          y.style.opacity = op;
-        } else {
-          op = Number(y.style.opacity) - 0.1;
-          if (!y.style.opacity.length) {
-            op = 1;
-          }
-          y.style.opacity = op;
-          if (op < 0.1) {
-            op = 0;
-            y.style.opacity = op;
-            y.style.visibility = 'hidden';
-            clearInterval(intv);
-          }
-        }
-      }
-    }, spd);
+    }, delay);
     return this;
   }
 
