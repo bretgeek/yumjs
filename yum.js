@@ -1443,12 +1443,13 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             el.lock = 'habadabadingdong';
             q();
           }
+        }, every);
 
           window.onblur = function() {
             // console.log('blurred');
             clearInterval(intv);
           };
-        }, every);
+
       } // end run
       run();
     } // el .lock if
