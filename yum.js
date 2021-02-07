@@ -29,7 +29,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       } else {
         if (itr.nodeType == 1) {
           // console.log('node type is a '+itr.nodeType);
-          // not sure why itr has to be an array even if it is onle one object
+          // not sure why itr has to be an array even if it is only one object
           // crazy hack to get one selector object passed in to work
           const tempitr = [itr];
           for ( const a of tempitr ) {
@@ -113,7 +113,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // check for ...rest as Arr
   // make unique array first
   Arr = Arr.filter((x, i, a) => a.indexOf(x) == i);
-  for ( let sel of Arr ) { // let instead of cont because sel gets mutated  below sel = sel.split(','); TODO fix
+  for ( let sel of Arr ) { // let instead of cont because sel gets mutated  below sel = sel.split(',');
     if (Array.isArray(sel)) {
       for ( const a of sel ) {
         if (a.nodeType === 1) {
@@ -439,7 +439,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     const types = etype.split(',');
     for ( const y of _stk ) {
       // console.log('stack');
-      for ( let t of types ) { // TODO fix let here instead of const because t is immediately mutated
+      for ( let t of types ) { // let here instead of const because t is immediately mutated
         t = t.trim();
         y.addEventListener(t, handler, userCap);
       }
@@ -491,7 +491,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   function drag(node, {drop='.droppable', drpfn=false, lvupfn = false, zindex=false, contain=false} ) {
     // for deciding if parent is to be dragged
-    if (node && typeof(node) !== 'function') {// if it is a function then its a swipe
+    if (node && typeof(node) !== 'function') { // if it is a function then its a swipe
       node = _stk[0].parentNode;
     } else {
       node = _stk[0];
@@ -1372,21 +1372,104 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
 
-  function fadeOut(delay=500) {
-   setTimeout(t => {
-    for(const y of _stk){
-    yum(y).css(`visibility: hidden; opacity: 0; transition: visibility 0s 2s, opacity 2s linear;`);
+  function q() {
+    console.log('starting q');
+    if (window.yumfxq.length) {
+      const fin = window.yumfxq[0]; // first in
+      window.yumfxq.shift();
+      fq(fin.el, fin.fn, fin.every, fin.iterations);
     }
-    }, delay)
+  }
+
+
+  // function fxq({ fn: fn, every: num, iterations: num){
+  function fxq({fn = () => {
+    return;
+  }, every=400, iterations = 0} = 'nada' ) {
+    let el;
+    if (!_stk.length) {
+      el = _createNode('div');
+      // just run fn once if not iterations
+      if (!iterations || iterations == 1) {
+        fn(0);
+      } else {
+        fq(el, fn, every, iterations);
+      }
+    } else {
+      for ( const y of _stk ) {
+        // just run fn once if not iterations
+        if (!iterations || iterations == 1) {
+          fn(0);
+        } else {
+          fq(y, fn, every, iterations);
+        }
+      }
+    }
+
+    return this;
+  }
+
+  function fq(el, fn, every, iterations) {
+    // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
+    window.yumfxq = window.yumfxq || [];
+
+    if (!el.lock || el.lock === 'habadabadingdong' ) {
+      el.lock = fn.name;
+    }
+
+    if (el.lock !== fn.name) {
+      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations} );
+    }
+
+    if (el.lock === fn.name) {
+      // using setInterval
+      el.run = 'no';
+      function run() {
+        let intv ='';
+        let i = 0;
+        intv = setInterval( (t) => {
+          // check if current function has finished
+          if (el.run === 'no') {
+            el.run = 'yes';
+            i++;
+
+            fn(i);
+            el.run = 'no';
+          }
+          // console.log('ran')
+          if (i >= iterations) {
+            i = 0;
+            clearInterval(intv);
+            el.lock = 'habadabadingdong';
+            q();
+          }
+
+          window.onblur = function() {
+            // console.log('blurred');
+            clearInterval(intv);
+          };
+        }, every);
+      } // end run
+      run();
+    } // el .lock if
+  }// end fq
+
+
+  function fadeOut(delay=500) {
+    setTimeout((t) => {
+      for (const y of _stk) {
+        yum(y).css(`visibility: hidden; opacity: 0; transition: visibility 0s 2s, opacity 2s linear;`);
+      }
+    }, delay);
     return this;
   }
 
 
   function fadeIn(delay=500) {
-   setTimeout(t => {
-    for(const y of _stk){
-    yum(y).css(`visibility: visible; opacity: 1; transition: opacity 2s linear;`);
-    }
+    setTimeout((t) => {
+      for (const y of _stk) {
+        yum(y).css(`visibility: visible; opacity: 1; transition: opacity 2s linear;`);
+      }
     }, delay);
     return this;
   }
@@ -1954,7 +2037,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function isFunction(thing) {
     return typeof thing === 'function';
   }
-  
+
 
   function isObject(thing) {
   // arrays are objects too so use isArray if you want to find arrays
@@ -1962,12 +2045,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   function isArray(thing) {
-      if (Array.isArray(thing)) {
+    if (Array.isArray(thing)) {
       return true;
-      }else{
+    } else {
       return false;
-      }
-   }
+    }
+  }
 
   function ctx(str='2d', obj=false) {
   // obj can be context attributes see MDN
@@ -1985,47 +2068,47 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
-  function _render(fn, to='body', { pos='append', reactor=true, state='state', initState=false, addClass=false, props=false, } = 'nada' ) {
- 
-     let position = 'append';
+  function _render(fn, to='body', {pos='append', reactor=true, state='state', initState=false, addClass=false, props=false} = 'nada' ) {
+    let position = 'append';
 
-     if(pos){
-     position = pos;
-     }
+    if (pos) {
+      position = pos;
+    }
 
     // check if function
     let h;
     if (isFunction(fn)) {
       h = fn(props);// returns the html
 
-     if(addClass){
-     yum(h).addClass(fn.name);
-     }
+      if (addClass) {
+        yum(h).addClass(fn.name);
+      }
 
-    if(reactor){
-    yum(h).Reactor();
-    }
-
+      if (reactor) {
+        yum(h).Reactor();
+      }
     } else {
       return;
     }
 
 
     if (!isFunction(h.react) && initState) {
-     h.react = function() { console.log('initState property found but no el.react function')  };
-    } 
+      h.react = function() {
+        console.log('initState property found but no el.react function');
+      };
+    }
 
 
     if (isFunction(h.react)) {
-     yum(h).ReactTo(h, fn.name, h.react, state);
-    if(initState === 0){
-     h.atom.state = 0;
+      yum(h).ReactTo(h, fn.name, h.react, state);
+      if (initState === 0) {
+        h.atom.state = 0;
       }
-    // dont run this if 0 was passed in 
-    if(initState){
-     h.atom.state = initState;
-     }
-     }
+      // dont run this if 0 was passed in
+      if (initState) {
+        h.atom.state = initState;
+      }
+    }
 
     // switch for pos
     switch (position) {
@@ -2119,6 +2202,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     _camelDash: _camelDash,
     _getAtPt: _getAtPt,
     fn: fn,
+    fxq: fxq,
   };
 
 
