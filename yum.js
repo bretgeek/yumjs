@@ -2204,6 +2204,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     _getAtPt: _getAtPt,
     fn: fn,
     fxq: fxq,
+    _cs: _cs,
   };
 
 
