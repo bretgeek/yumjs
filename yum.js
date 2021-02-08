@@ -1382,21 +1382,27 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-
+  // FXQ as basic effects queue
   function q() {
     console.log('starting q');
     if (window.yumfxq.length) {
       const fin = window.yumfxq[0]; // first in
       window.yumfxq.shift();
-      fq(fin.el, fin.fn, fin.every, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit);
+      fq(fin.el, fin.fn, fin.every, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit, fin.done);
     }
   }
 
+  function stop(){
+  // console.log('stop');
+    clearInterval(window.yumintv);
+    return this;
+    window.yumfxq = [];
+  }
 
   // function fxq({ fn: fn, every: num, iterations: num){
   function fxq({fn = () => {
     return;
-  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px' } = 'nada' ) {
+  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false } = 'nada' ) {
     let el;
     if (!_stk.length) {
       el = _createNode('div');
@@ -1412,7 +1418,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         if (!iterations || iterations == 1) {
           fn(0);
         } else {
-        fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit);
+        fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit, done);
         }
       }
     }
@@ -1420,9 +1426,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up',maxstep=1, unit='px') {
+  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up',maxstep=1, unit='px', done=false) {
     // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
     window.yumfxq = window.yumfxq || [];
+    window.yumintv = window.yumintv || ''; // this must be on window in order to use stop
 
      // for simulationeos animations without using a passed in function (or a passed in function of the same name) 
      let lockname = fn.name;
@@ -1433,25 +1440,24 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
      //console.log('lockname is '+lockname);
      //}
 
-    if (!el.lock || el.lock === 'habadabadingdong' ) {
+    if (!el.lock || el.lock === 'yumjs' ) {
       el.lock = lockname;
     }
 
     if (el.lock !== lockname) {
-      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit });
+      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit, done: done });
     }
 
     if (el.lock === lockname) {
       // using setInterval
       
       el.run = 'no';
-        let intv ='';
         let i = 0;
-      function run() {
-          // check if current function has finished
-          if (el.run === 'no') {
-            el.run = 'yes';
-            i++;
+  function run() {
+     // check if current function has finished
+      if (el.run === 'no') {
+        el.run = 'yes';
+        i++;
 
 //EFFECTS
 //EASING
@@ -1460,9 +1466,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               console.log('easing is '+easing);
                if(easing === 'fast' && i > 6){
                 console.log('changing every')
-                 clearInterval(intv);
+                 clearInterval(window.yumintv);
                  every = 10;
-                 intv = setInterval( (t) => {
+                 window.yumintv = setInterval( (t) => {
                  run()
                  }, every);
                }
@@ -1503,19 +1509,22 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           // console.log('ran')
           if (i >= iterations) {
             i = 0;
-            clearInterval(intv);
-            el.lock = 'habadabadingdong';
+            clearInterval(window.yumintv);
+            el.lock = 'yumjs';
+          if(isFunction(done)){
+           done();
+          }
             q();
           }
       } // end run
 
-        intv = setInterval( (t) => {
+        window.yumintv = setInterval( (t) => {
         run()
         }, every);
 
           window.onblur = function() {
             // console.log('blurred');
-            clearInterval(intv);
+            clearInterval(window.yumintv);
           };
 
     } // el .lock if
@@ -2273,6 +2282,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     _getAtPt: _getAtPt,
     fn: fn,
     fxq: fxq,
+    stop: stop,
     _cs: _cs,
   };
 
