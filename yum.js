@@ -1433,7 +1433,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             el.run = 'yes';
             i++;
 
-            fn(i);
+            fn(el,i);
             el.run = 'no';
           }
           // console.log('ran')
