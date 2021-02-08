@@ -2088,6 +2088,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       if (reactor) {
         yum(h).Reactor();
       }
+
+      // local yumobservers
+      h.yob = {}; 
+      
     } else {
       return;
     }
