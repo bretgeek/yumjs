@@ -1139,7 +1139,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // params sel, fn to run after delay
   // Pass in an object and build config from that then change the if mutation
   // function spy(fn, name = 'name', delay=10 ) {
-  function spy(fn, name = 'name', {delay=10, child=true, attr=true, subtree=false, attrs=['style'], chardat=false, attrsOV=false, chardatOV=false}, yo=false ) {
+  function spy(fn, name = 'name', {delay=10, child=true, attr=true, subtree=false, attrs=['none'], chardat=false, attrsOV=false, chardatOV=false}, yo=false ) {
     // keep a record of observers in an object of global var or component so we can disconnect them later
   // yo here is to pass in a reference to a component  object
     if (yo) {
@@ -1171,12 +1171,24 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       // create an observer instance
       const ob = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList' || mutation.type === 'attributes' || mutation.type === 'subtree' || mutation.type === 'characterData') {
+          //handle attributes seperately if passed in i.e if you dont pass any attrs in then it will only spy on DOM/node changes
+      
+          if(mutation.type === 'attributes'){
+            if(attrs[0] !== 'none'){
+            setTimeout((t) => {
+              fn(e);
+            }, delay);
+          }
+          }else{
+            if(attrs[0] === 'none'){
+          if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData' ) {
             setTimeout((t) => {
               // console.log('mutor type '+mutation.type);
               fn(e);
             }, delay);
           }// end childList
+       }
+       }
         });
       });
         // add to yumobservers object, pass in target nodes, and observer config
@@ -1384,7 +1396,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // function fxq({ fn: fn, every: num, iterations: num){
   function fxq({fn = () => {
     return;
-  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px'} = 'nada' ) {
+  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px' } = 'nada' ) {
     let el;
     if (!_stk.length) {
       el = _createNode('div');
@@ -1400,7 +1412,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         if (!iterations || iterations == 1) {
           fn(0);
         } else {
-          fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit);
+        fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit);
         }
       }
     }
@@ -1408,101 +1420,104 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px') {
+  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up',maxstep=1, unit='px') {
     // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
     window.yumfxq = window.yumfxq || [];
 
-    // for simulationeos animations without using a passed in function (or a passed in function of the same name)
-    const lockname = fn.name;
+     // for simulationeos animations without using a passed in function (or a passed in function of the same name) 
+     let lockname = fn.name;
 
-    // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
-    // if(lockname === 'fn'){
-    // lockname = _uuidv4();
-    // console.log('lockname is '+lockname);
-    // }
+      // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
+     //if(lockname === 'fn'){
+     //lockname = _uuidv4();
+     //console.log('lockname is '+lockname);
+     //}
 
     if (!el.lock || el.lock === 'habadabadingdong' ) {
       el.lock = lockname;
     }
 
     if (el.lock !== lockname) {
-      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit});
+      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit });
     }
 
     if (el.lock === lockname) {
       // using setInterval
-
+      
       el.run = 'no';
-      let intv ='';
-      let i = 0;
+        let intv ='';
+        let i = 0;
       function run() {
-        // check if current function has finished
-        if (el.run === 'no') {
-          el.run = 'yes';
-          i++;
+          // check if current function has finished
+          if (el.run === 'no') {
+            el.run = 'yes';
+            i++;
 
-          // EFFECTS
-          // EASING
-          // in order to change every i.e. when speedingup or slowing down as in easing you have to stop the interval and restart it with the new every - you will have to figure out the best speeads(10 here) to change based on the type of easing you want (their names)
-          // TODO figure all types of easing we want
-          console.log('easing is '+easing);
-          if (easing === 'fast' && i > 6) {
-            console.log('changing every');
-            clearInterval(intv);
-            every = 10;
-            intv = setInterval( (t) => {
-              run();
-            }, every);
-          }
+//EFFECTS
+//EASING
+             // in order to change every i.e. when speedingup or slowing down as in easing you have to stop the interval and restart it with the new every - you will have to figure out the best speeads(10 here) to change based on the type of easing you want (their names)
+              //TODO figure all types of easing we want
+              console.log('easing is '+easing);
+               if(easing === 'fast' && i > 6){
+                console.log('changing every')
+                 clearInterval(intv);
+                 every = 10;
+                 intv = setInterval( (t) => {
+                 run()
+                 }, every);
+               }
 
           // RULES for Specific properties to animate
-          if (prop) {
+          if(prop){
+
             // OPACITY animates based on decimal less than 1
             let result;
-            if (prop === 'opacity') {
-              if (step >= 1) { // no funny business
-                step = 0.1;
-              }
-              // console.log('direction is '+direction);
-              result = yum()._cs(el, 'opacity');
-              if (direction === 'down' ) {
-                console.log('result is '+result);
-                if (result > 0) {
-                  result = result - step;
-                }
-              } else { // up
-                if (result < 1) {
-                  result = result + step;
-                }
-              }
-              yum(el).css(` ${prop}: ${result}${unit}; `);
+             if(prop === 'opacity'){
+            if(step >= 1){ // no funny business
+            step = 0.1;
+            }
+            // console.log('direction is '+direction);
+            result = yum()._cs(el, 'opacity');
+            if(direction === 'down' ){
+            console.log('result is '+result);
+            if(result > 0){
+            result =  result - step;
+             }
+            }else{ // up
+            if(result < 1){
+            result =  result + step;
+             }
+            }
+           yum(el).css(` ${prop}: ${result}${unit}; `)
             } // end if prop is opacity
+            
           }// end props
 
 
-          // END EFFECTS
+         // END EFFECTS
 
-          fn(el, i);
-          // fn has finished
-          el.run = 'no';
-        }
-        // console.log('ran')
-        if (i >= iterations) {
-          i = 0;
-          clearInterval(intv);
-          el.lock = 'habadabadingdong';
-          q();
-        }
+            fn(el,i);
+            // fn has finished
+            el.run = 'no';
+          }
+          // console.log('ran')
+          if (i >= iterations) {
+            i = 0;
+            clearInterval(intv);
+            el.lock = 'habadabadingdong';
+            q();
+          }
       } // end run
 
-      intv = setInterval( (t) => {
-        run();
-      }, every);
+        intv = setInterval( (t) => {
+        run()
+        }, every);
 
-      window.onblur = function() {
-        // console.log('blurred');
-        clearInterval(intv);
-      };
+          window.onblur = function() {
+            // console.log('blurred');
+            clearInterval(intv);
+          };
+
     } // el .lock if
   }// end fq
 
@@ -2130,7 +2145,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     // check if function
     let h;
     if (isFunction(fn)) {
-      h = fn(props); // returns the object to be inserted, Ex. let html = `<h1>1</h1>`; let h = yum(html).first;
+      h = fn(props); // returns the object to be inserted, Ex. let html = `<h1>1</h1>`; let h = yum(html).first; 
 
       if (addClass) {
         yum(h).addClass(fn.name);
@@ -2141,6 +2156,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       }
       // local yumobservers
       h.yob = {};
+
     } else {
       return;
     }
