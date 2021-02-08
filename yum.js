@@ -1,6 +1,5 @@
 function yum(itr, ...Arr) {// itr = strings of things to iterate over
-  
-// components can have non global yumobservers - see spy
+  // components can have non global yumobservers - see spy
   globalThis.yumobservers = globalThis.yumobservers || {};
 
   let itrtemp; // for saving itr
@@ -1377,7 +1376,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     if (window.yumfxq.length) {
       const fin = window.yumfxq[0]; // first in
       window.yumfxq.shift();
-      fq(fin.el, fin.fn, fin.every, fin.iterations);
+      fq(fin.el, fin.fn, fin.every, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit);
     }
   }
 
@@ -1385,7 +1384,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // function fxq({ fn: fn, every: num, iterations: num){
   function fxq({fn = () => {
     return;
-  }, every=400, iterations = 0} = 'nada' ) {
+  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px'} = 'nada' ) {
     let el;
     if (!_stk.length) {
       el = _createNode('div');
@@ -1401,7 +1400,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         if (!iterations || iterations == 1) {
           fn(0);
         } else {
-          fq(y, fn, every, iterations);
+          fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit);
         }
       }
     }
@@ -1409,49 +1408,101 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function fq(el, fn, every, iterations) {
+  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px') {
     // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
     window.yumfxq = window.yumfxq || [];
 
+    // for simulationeos animations without using a passed in function (or a passed in function of the same name)
+    const lockname = fn.name;
+
+    // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
+    // if(lockname === 'fn'){
+    // lockname = _uuidv4();
+    // console.log('lockname is '+lockname);
+    // }
+
     if (!el.lock || el.lock === 'habadabadingdong' ) {
-      el.lock = fn.name;
+      el.lock = lockname;
     }
 
-    if (el.lock !== fn.name) {
-      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations} );
+    if (el.lock !== lockname) {
+      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit});
     }
 
-    if (el.lock === fn.name) {
+    if (el.lock === lockname) {
       // using setInterval
+
       el.run = 'no';
+      let intv ='';
+      let i = 0;
       function run() {
-        let intv ='';
-        let i = 0;
-        intv = setInterval( (t) => {
-          // check if current function has finished
-          if (el.run === 'no') {
-            el.run = 'yes';
-            i++;
+        // check if current function has finished
+        if (el.run === 'no') {
+          el.run = 'yes';
+          i++;
 
-            fn(el,i);
-            el.run = 'no';
-          }
-          // console.log('ran')
-          if (i >= iterations) {
-            i = 0;
+          // EFFECTS
+          // EASING
+          // in order to change every i.e. when speedingup or slowing down as in easing you have to stop the interval and restart it with the new every - you will have to figure out the best speeads(10 here) to change based on the type of easing you want (their names)
+          // TODO figure all types of easing we want
+          console.log('easing is '+easing);
+          if (easing === 'fast' && i > 6) {
+            console.log('changing every');
             clearInterval(intv);
-            el.lock = 'habadabadingdong';
-            q();
+            every = 10;
+            intv = setInterval( (t) => {
+              run();
+            }, every);
           }
-        }, every);
 
-          window.onblur = function() {
-            // console.log('blurred');
-            clearInterval(intv);
-          };
+          // RULES for Specific properties to animate
+          if (prop) {
+            // OPACITY animates based on decimal less than 1
+            let result;
+            if (prop === 'opacity') {
+              if (step >= 1) { // no funny business
+                step = 0.1;
+              }
+              // console.log('direction is '+direction);
+              result = yum()._cs(el, 'opacity');
+              if (direction === 'down' ) {
+                console.log('result is '+result);
+                if (result > 0) {
+                  result = result - step;
+                }
+              } else { // up
+                if (result < 1) {
+                  result = result + step;
+                }
+              }
+              yum(el).css(` ${prop}: ${result}${unit}; `);
+            } // end if prop is opacity
+          }// end props
 
+
+          // END EFFECTS
+
+          fn(el, i);
+          // fn has finished
+          el.run = 'no';
+        }
+        // console.log('ran')
+        if (i >= iterations) {
+          i = 0;
+          clearInterval(intv);
+          el.lock = 'habadabadingdong';
+          q();
+        }
       } // end run
-      run();
+
+      intv = setInterval( (t) => {
+        run();
+      }, every);
+
+      window.onblur = function() {
+        // console.log('blurred');
+        clearInterval(intv);
+      };
     } // el .lock if
   }// end fq
 
@@ -2079,7 +2130,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     // check if function
     let h;
     if (isFunction(fn)) {
-      h = fn(props);// returns the html
+      h = fn(props); // returns the object to be inserted, Ex. let html = `<h1>1</h1>`; let h = yum(html).first;
 
       if (addClass) {
         yum(h).addClass(fn.name);
@@ -2088,10 +2139,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       if (reactor) {
         yum(h).Reactor();
       }
-
       // local yumobservers
-      h.yob = {}; 
-      
+      h.yob = {};
     } else {
       return;
     }
