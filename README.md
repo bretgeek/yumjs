@@ -13,17 +13,16 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
 
 **Funding:** https://www.patreon.com/yumjs?fan_landing=true
 
-## Goals
+## Features
 
-  -  Be simple, easy to learn with familiar syntax.
-  -  Optional component syntax.
-  -  Act as a lightweight alternative to JQuery (not all JQuery functions implemented).
-  -  Complement and shorten JavaScript's syntax whenever possible.
-  -  Ability to subscribe to and make **any** element reactive.
-  -  Be small, fast, lightweight and flexible.
+  -  Simple, easy to learn with familiar syntax.
+  -  Optional component (rendering) syntax with props and state.
+  -  A lightweight alternative to JQuery (not all JQuery functions implemented).
+  -  Tons of utility functions.
+  -  Ability to observe or subscribe to **any** element for complex reactity.
+  -  Small, fast, lightweight and flexible.
   -  Built in Drag and Drop/swipe.
-  -  Be open source and extendable with intuitive plugin system.
-  -  Encourage less DOM diving.
+  -  Open source and extendable with intuitive plugin system.
     
 ## Downloads and Docs
 
