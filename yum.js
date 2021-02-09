@@ -367,6 +367,13 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
+  // Insert a delay between fxq calls
+  function delayfq(wait=400){
+    wat = wait / 2; // must divide wait time by 2 and have two iterations for proper delay time
+    fxq({fn: () => { }, every: wait, iterations: 2,  })
+    return this;
+   }
+
   /* ISNUMBER */
   function __isNum(value) {
     return /^-{0,1}\d+$/.test(value);
@@ -2291,6 +2298,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     fadeOut: fadeOut,
     ready: ready,
     delay: delay,
+    delayfq: delayfq,
     plug: plug,
     spy: spy,
     unspy: unspy,
