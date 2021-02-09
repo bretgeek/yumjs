@@ -1512,7 +1512,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             clearInterval(window.yumintv);
             el.lock = 'yumjs';
           if(isFunction(done)){
-           done();
+           done(el);
           }
             q();
           }
