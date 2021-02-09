@@ -1395,9 +1395,15 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function stop(){
   // console.log('stop');
     clearInterval(window.yumintv);
-    return this;
     window.yumfxq = [];
+    return this;
   }
+
+  function clearfxq(){
+    window.yumfxq = [];
+    return this;
+  }
+
 
   // function fxq({ fn: fn, every: num, iterations: num){
   function fxq({fn = () => {
@@ -1461,17 +1467,35 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
 //EFFECTS
 //EASING
-             // in order to change every i.e. when speedingup or slowing down as in easing you have to stop the interval and restart it with the new every - you will have to figure out the best speeads(10 here) to change based on the type of easing you want (their names)
-              //TODO figure all types of easing we want
-              console.log('easing is '+easing);
-               if(easing === 'fast' && i > 6){
-                console.log('changing every')
+              //TODO add other easing types here
+              // console.log('easing is '+easing);
+               // fast
+               if(easing === 'fast' && i > (iterations/2) ){ // start have way through
                  clearInterval(window.yumintv);
                  every = 10;
                  window.yumintv = setInterval( (t) => {
                  run()
                  }, every);
                }
+               // slow
+               if(easing === 'moderate' && i > (iterations/2) ){ // start have way through
+                 clearInterval(window.yumintv);
+                 every = 100;
+                 window.yumintv = setInterval( (t) => {
+                 run()
+                 }, every);
+               }
+
+
+               // outin
+               if(easing === 'slow' && i > (iterations - (iterations/2))   ){ // start have way through
+                 clearInterval(window.yumintv);
+                 every = 300;
+                 window.yumintv = setInterval( (t) => {
+                 run()
+                 }, every);
+               }
+
 
           // RULES for Specific properties to animate
           if(prop){
@@ -2283,6 +2307,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     fn: fn,
     fxq: fxq,
     stop: stop,
+    clearfxq: clearfxq,
     _cs: _cs,
   };
 
