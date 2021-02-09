@@ -1472,20 +1472,21 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         el.run = 'yes';
         i++;
 
-//EFFECTS
-//EASING
+              //EFFECTS
+              //EASING
               //TODO add other easing types here
               // console.log('easing is '+easing);
                // fast
-               if(easing === 'fast' && i > (iterations/2) ){ // start have way through
+                 // start half way through
+               if(easing === 'fast' && i > (iterations/2) ){ 
                  clearInterval(window.yumintv);
                  every = 10;
                  window.yumintv = setInterval( (t) => {
                  run()
                  }, every);
                }
-               // slow
-               if(easing === 'moderate' && i > (iterations/2) ){ // start have way through
+               // moderate
+               if(easing === 'moderate' && i > (iterations/2) ){ 
                  clearInterval(window.yumintv);
                  every = 100;
                  window.yumintv = setInterval( (t) => {
@@ -1494,8 +1495,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
                }
 
 
-               // outin
-               if(easing === 'slow' && i > (iterations - (iterations/2))   ){ // start have way through
+               // slow
+               if(easing === 'slow' && i > (iterations - (iterations/2))   ){ 
                  clearInterval(window.yumintv);
                  every = 300;
                  window.yumintv = setInterval( (t) => {
