@@ -18,6 +18,7 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
   -  Simple, easy to learn with familiar syntax.
   -  Optional component (rendering) syntax with props and state.
   -  A lightweight alternative to JQuery (not all JQuery functions implemented).
+  -  An FX function queue for custom queued animations / functions stack.
   -  Tons of utility functions.
   -  Ability to observe or subscribe to **any** element for complex reactity.
   -  Small, fast, lightweight and flexible.
