@@ -368,11 +368,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // Insert a delay between fxq calls
-  function delayfq(wait=400){
+  function delayfq(wait=400) {
     wat = wait / 2; // must divide wait time by 2 and have two iterations for proper delay time
-    fxq({fn: () => { }, every: wait, iterations: 2,  })
+    fxq({fn: () => { }, speed: wait, iterations: 2});
     return this;
-   }
+  }
 
   /* ISNUMBER */
   function __isNum(value) {
@@ -1178,24 +1178,24 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       // create an observer instance
       const ob = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
-          //handle attributes seperately if passed in i.e if you dont pass any attrs in then it will only spy on DOM/node changes
-      
-          if(mutation.type === 'attributes'){
-            if(attrs[0] !== 'none'){
-            setTimeout((t) => {
-              fn(e);
-            }, delay);
+          // handle attributes seperately if passed in i.e if you dont pass any attrs in then it will only spy on DOM/node changes
+
+          if (mutation.type === 'attributes') {
+            if (attrs[0] !== 'none') {
+              setTimeout((t) => {
+                fn(e);
+              }, delay);
+            }
+          } else {
+            if (attrs[0] === 'none') {
+              if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData' ) {
+                setTimeout((t) => {
+                  // console.log('mutor type '+mutation.type);
+                  fn(e);
+                }, delay);
+              }// end childList
+            }
           }
-          }else{
-            if(attrs[0] === 'none'){
-          if (mutation.type === 'childList' || mutation.type === 'subtree' || mutation.type === 'characterData' ) {
-            setTimeout((t) => {
-              // console.log('mutor type '+mutation.type);
-              fn(e);
-            }, delay);
-          }// end childList
-       }
-       }
         });
       });
         // add to yumobservers object, pass in target nodes, and observer config
@@ -1395,27 +1395,27 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     if (window.yumfxq.length) {
       const fin = window.yumfxq[0]; // first in
       window.yumfxq.shift();
-      fq(fin.el, fin.fn, fin.every, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit, fin.done);
+      fq(fin.el, fin.fn, fin.speed, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit, fin.done);
     }
   }
 
-  function stop(){
+  function stop() {
   // console.log('stop');
     clearInterval(window.yumintv);
     window.yumfxq = [];
     return this;
   }
 
-  function clearfxq(){
+  function clearfxq() {
     window.yumfxq = [];
     return this;
   }
 
 
-  // function fxq({ fn: fn, every: num, iterations: num){
+  // function fxq({ fn: fn, speed: num, iterations: num){
   function fxq({fn = () => {
     return;
-  }, every=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false } = 'nada' ) {
+  }, speed=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false} = 'nada' ) {
     let el;
     if (!_stk.length) {
       el = _createNode('div');
@@ -1423,7 +1423,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       if (!iterations || iterations == 1) {
         fn(0);
       } else {
-        fq(el, fn, every, iterations);
+        fq(el, fn, speed, iterations);
       }
     } else {
       for ( const y of _stk ) {
@@ -1431,7 +1431,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         if (!iterations || iterations == 1) {
           fn(0);
         } else {
-        fq(y, fn, every, iterations, easing, prop, step, direction, maxstep, unit, done);
+          fq(y, fn, speed, iterations, easing, prop, step, direction, maxstep, unit, done);
         }
       }
     }
@@ -1439,126 +1439,145 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function fq(el, fn, every, iterations, easing=false, prop=false, step=1, direction='up',maxstep=1, unit='px', done=false) {
+  function fq(el, fn, speed, iterations, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false) {
     // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
     window.yumfxq = window.yumfxq || [];
     window.yumintv = window.yumintv || ''; // this must be on window in order to use stop
 
-     // for simulationeos animations without using a passed in function (or a passed in function of the same name) 
-     let lockname = fn.name;
+    // for simulationeos animations without using a passed in function (or a passed in function of the same name)
+    const lockname = fn.name;
 
-      // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
-     //if(lockname === 'fn'){
-     //lockname = _uuidv4();
-     //console.log('lockname is '+lockname);
-     //}
+    // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
+    // if(lockname === 'fn'){
+    // lockname = _uuidv4();
+    // console.log('lockname is '+lockname);
+    // }
 
     if (!el.lock || el.lock === 'yumjs' ) {
       el.lock = lockname;
     }
 
     if (el.lock !== lockname) {
-      window.yumfxq.push( {el: el, fn: fn, every: every, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit, done: done });
+      window.yumfxq.push( {el: el, fn: fn, speed: speed, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit, done: done});
     }
 
     if (el.lock === lockname) {
       // using setInterval
-      
+
+      // attach speed to the el so we can short circuit it from the outside
+      el.speed = speed;
+      el.origspeed = speed;
+      // if speed changes during a run this is how we will know
+      let tmpspeed = speed;
+
+
       el.run = 'no';
-        let i = 0;
-  function run() {
-     // check if current function has finished
-      if (el.run === 'no') {
-        el.run = 'yes';
-        i++;
-
-              //EFFECTS
-              //EASING
-              //TODO add other easing types here
-              // console.log('easing is '+easing);
-               // fast
-                 // start half way through
-               if(easing === 'fast' && i > (iterations/2) ){ 
-                 clearInterval(window.yumintv);
-                 every = 10;
-                 window.yumintv = setInterval( (t) => {
-                 run()
-                 }, every);
-               }
-               // moderate
-               if(easing === 'moderate' && i > (iterations/2) ){ 
-                 clearInterval(window.yumintv);
-                 every = 100;
-                 window.yumintv = setInterval( (t) => {
-                 run()
-                 }, every);
-               }
+      let i = 0;
+      function run() {
+        // check if current function has finished
+        if (el.run === 'no') {
+          el.run = 'yes';
+          i++;
 
 
-               // slow
-               if(easing === 'slow' && i > (iterations - (iterations/2))   ){ 
-                 clearInterval(window.yumintv);
-                 every = 300;
-                 window.yumintv = setInterval( (t) => {
-                 run()
-                 }, every);
-               }
+          // we don't want speed to ever be below 0 (when doing negative numbers ) so set to 10 to be safe
+          if (el.speed < 10) {
+            el.speed = 10;
+          }
+          // if speed changes during a run this is how we will know
+          if (tmpspeed != el.speed) {
+            tmpspeed = el.speed;
+            clearInterval(window.yumintv);
+            window.yumintv = setInterval( (t) => {
+              run();
+            }, el.speed);
+          }
+
+
+          // EFFECTS
+          // EASING
+          // TODO add other easing types here
+          // console.log('easing is '+easing);
+          // fast
+          // start half way through
+          if (easing === 'fast' && i > (iterations/2) ) {
+            clearInterval(window.yumintv);
+            el.speed = 10;
+            window.yumintv = setInterval( (t) => {
+              run();
+            }, el.speed);
+          }
+          // moderate
+          if (easing === 'moderate' && i > (iterations/2) ) {
+            clearInterval(window.yumintv);
+            el.speed = 100;
+            window.yumintv = setInterval( (t) => {
+              run();
+            }, el.speed);
+          }
+
+
+          // slow
+          if (easing === 'slow' && i > (iterations - (iterations/2)) ) {
+            clearInterval(window.yumintv);
+            el.speed = 300;
+            window.yumintv = setInterval( (t) => {
+              run();
+            }, el.speed);
+          }
 
 
           // RULES for Specific properties to animate
-          if(prop){
-
+          if (prop) {
             // OPACITY animates based on decimal less than 1
             let result;
-             if(prop === 'opacity'){
-            if(step >= 1){ // no funny business
-            step = 0.1;
-            }
-            // console.log('direction is '+direction);
-            result = yum()._cs(el, 'opacity');
-            if(direction === 'down' ){
-            console.log('result is '+result);
-            if(result > 0){
-            result =  result - step;
-             }
-            }else{ // up
-            if(result < 1){
-            result =  result + step;
-             }
-            }
-           yum(el).css(` ${prop}: ${result}${unit}; `)
+            if (prop === 'opacity') {
+              if (step >= 1) { // no funny business
+                step = 0.1;
+              }
+              // console.log('direction is '+direction);
+              result = yum()._cs(el, 'opacity');
+              if (direction === 'down' ) {
+                console.log('result is '+result);
+                if (result > 0) {
+                  result = result - step;
+                }
+              } else { // up
+                if (result < 1) {
+                  result = result + step;
+                }
+              }
+              yum(el).css(` ${prop}: ${result}${unit}; `);
             } // end if prop is opacity
-            
           }// end props
 
 
-         // END EFFECTS
+          // END EFFECTS
 
-            fn(el,i);
-            // fn has finished
-            el.run = 'no';
+          fn(el, i);
+          // fn has finished
+          el.run = 'no';
+        }
+        // console.log('ran')
+        if (i >= iterations) {
+          i = 0;
+          clearInterval(window.yumintv);
+          el.lock = 'yumjs';
+          if (isFunction(done)) {
+            done(el);
           }
-          // console.log('ran')
-          if (i >= iterations) {
-            i = 0;
-            clearInterval(window.yumintv);
-            el.lock = 'yumjs';
-          if(isFunction(done)){
-           done(el);
-          }
-            q();
-          }
+          q();
+        }
       } // end run
 
-        window.yumintv = setInterval( (t) => {
-        run()
-        }, every);
+      window.yumintv = setInterval( (t) => {
+        run();
+      }, speed);
 
-          window.onblur = function() {
-            // console.log('blurred');
-            clearInterval(window.yumintv);
-          };
-
+      window.onblur = function() {
+        // console.log('blurred');
+        clearInterval(window.yumintv);
+      };
     } // el .lock if
   }// end fq
 
@@ -2186,7 +2205,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     // check if function
     let h;
     if (isFunction(fn)) {
-      h = fn(props); // returns the object to be inserted, Ex. let html = `<h1>1</h1>`; let h = yum(html).first; 
+      h = fn(props); // returns the object to be inserted, Ex. let html = `<h1>1</h1>`; let h = yum(html).first;
 
       if (addClass) {
         yum(h).addClass(fn.name);
@@ -2197,7 +2216,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       }
       // local yumobservers
       h.yob = {};
-
     } else {
       return;
     }
