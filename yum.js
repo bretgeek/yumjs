@@ -1833,7 +1833,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
 
-  // PARENT for each element in the stack put each direct parent on the stack and subsequent chains will act on the parent/s - if You want to return the collection chain with ._
+  // PARENT for each element in the stack put each direct parent on the stack and subsequent chains will act on the parent/s - if You want to return the collection chain with ._ or .first to return the first parent of the stack
   function parent() {
     let nstk = [];// the new stack
     for ( const y of _stk) {
@@ -2195,7 +2195,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // App, to=element {options [pos=position, reactor = create a reactor, set reactor element to atom  }
-  function _render(fn, to='body', {pos='append', reactor=true, state='state', initState=false, addClass=false, props=false} = 'nada' ) {
+  function _render(fn, to='body', {pos='append', reactor=true, state='state', initState=false, addClass=true, props=false} = 'nada' ) {
     let position = 'append';
 
     if (pos) {
