@@ -2227,6 +2227,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       };
     }
 
+    if (isFunction(h.ready)) {
+      yum(document).ready( function(){
+      h.ready();
+      });
+    } 
 
     if (isFunction(h.react)) {
       yum(h).ReactTo(h, fn.name, h.react, state);
