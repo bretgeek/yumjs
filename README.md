@@ -20,7 +20,7 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
   -  A lightweight alternative to JQuery (not all JQuery functions implemented).
   -  An FX function queue for custom queued animations / functions stack.
   -  Tons of utility functions.
-  -  Ability to observe or subscribe to **any** element for complex reactity.
+  -  Ability to observe or subscribe to **any** element for complex reactivity.
   -  Small, fast, lightweight and flexible.
   -  Built in Drag and Drop/swipe.
   -  Open source and extendable with intuitive plugin system.
