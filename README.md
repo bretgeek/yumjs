@@ -23,7 +23,7 @@ Yum provides a familiar **procedural** and a **component** based syntax with low
   -  Ability to observe or subscribe to **any** element for complex reactivity.
   -  Small, fast, lightweight and flexible.
   -  Built in Drag and Drop/swipe.
-  -  Open source and extendable with intuitive plugin system.
+  -  A nodeJS build tool for component based apps [Yum App Builder](https://yumjs.net/blog/build-apps-with-yum-components/).
     
 ## Downloads and Docs
 
