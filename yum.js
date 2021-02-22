@@ -1879,10 +1879,19 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             time = time * 2;
           }
           pinc++;
-          setTimeout((t)=>{
+
+       let intv;
+       intv = setInterval((t)=>{
             console.log('iterating');
             f(e, time, step);
+              if(pinc >= farr.length){
+                clearInterval(intv)
+              }
           }, time);
+    window.onblur = function() {
+      clearInterval(intv)
+    };
+
         }
       }
     }
