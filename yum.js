@@ -2160,7 +2160,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     ready: ready,
     delay: delay,
     plug: plug,
-    fq: plug,
+    fx: plug,
     spy: spy,
     unspy: unspy,
     trigger: trigger,
