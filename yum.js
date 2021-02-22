@@ -1418,24 +1418,15 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // function fxq({ fn: fn, speed: num, iterations: num){
   function fxq({fn = () => {
     return;
-  }, speed=400, iterations = 0, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false} = 'nada' ) {
+  }, speed=400, iterations = 1, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false} = 'nada' ) {
     let el;
     if (!_stk.length) {
       el = _createNode('div');
-      // just run fn once if not iterations
-      if (!iterations || iterations == 1) {
-        fn(0);
-      } else {
-        fq(el, fn, speed, iterations);
-      }
+       // fq(el, fn, speed, iterations);
+          fq(el, fn, speed, iterations, easing, prop, step, direction, maxstep, unit, done);
     } else {
       for ( const y of _stk ) {
-        // just run fn once if not iterations
-        if (!iterations || iterations == 1) {
-          fn(0);
-        } else {
           fq(y, fn, speed, iterations, easing, prop, step, direction, maxstep, unit, done);
-        }
       }
     }
 
