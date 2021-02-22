@@ -1858,13 +1858,13 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // PLUGIN
   // function plug(fn, time=10, step=1, iterate=1) {
-  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) {
+  function plug(fn, { delay = 10, step = 1, iterate = 1} = 1) {
     for ( const e of _stk) {
       if (iterate <= 1) {
         setTimeout((t)=>{
-          // console.log(`running ${time} with ${step}`)
-          fn(e, time, step); // the plugged in function gets passed these params but you don't have to use them
-        }, time);
+          // console.log(`running ${ delay} with ${step}`)
+          fn(e,  delay, step); // the plugged in function gets passed these params but you don't have to use them
+        },  delay);
       }
       
     e.farr = e.farr || [];
@@ -1877,18 +1877,18 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       if (e.farr.length) {
         for (f of e.farr) {
           if (pinc > 0 ) {
-            time = time * 2;
+             delay =  delay * 2; // delay must double for subsequent calls
           }
           pinc++;
 
        let intv;
        intv = setInterval((t)=>{
             console.log('iterating');
-            f(e, time, step);
+            f(e,  delay, step);
               if(pinc >= e.farr.length){
                 clearInterval(intv)
               }
-          }, time);
+          },  delay);
     window.onblur = function() {
       clearInterval(intv)
     };
