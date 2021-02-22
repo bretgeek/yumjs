@@ -367,13 +367,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  // Insert a delay between fxq calls
-  function delayfq(wait=400) {
-    wat = wait / 2; // must divide wait time by 2 and have two iterations for proper delay time
-    fxq({fn: () => { }, speed: wait, iterations: 2});
-    return this;
-  }
-
   /* ISNUMBER */
   function __isNum(value) {
     return /^-{0,1}\d+$/.test(value);
@@ -1391,191 +1384,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
     return this;
   }
-
-  // FXQ as basic effects queue
-  function q() {
-    console.log('starting q');
-    if (window.yumfxq.length) {
-      const fin = window.yumfxq[0]; // first in
-      window.yumfxq.shift();
-      fq(fin.el, fin.fn, fin.speed, fin.iterations, fin.easing, fin.prop, fin.step, fin.direction, fin.maxstep, fin.unit, fin.done);
-    }
-  }
-
-  function stop() {
-  // console.log('stop');
-    clearInterval(window.yumintv);
-    window.yumfxq = [];
-    return this;
-  }
-
-  function clearfxq() {
-    window.yumfxq = [];
-    return this;
-  }
-
-
-  // function fxq({ fn: fn, speed: num, iterations: num){
-  function fxq({fn = () => {
-    return;
-  }, speed=400, iterations = 1, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false} = 'nada' ) {
-    let el;
-    if (!_stk.length) {
-      el = _createNode('div');
-       // fq(el, fn, speed, iterations);
-          fq(el, fn, speed, iterations, easing, prop, step, direction, maxstep, unit, done);
-    } else {
-      for ( const y of _stk ) {
-          fq(y, fn, speed, iterations, easing, prop, step, direction, maxstep, unit, done);
-      }
-    }
-
-    return this;
-  }
-
-  function fq(el, fn, speed, iterations, easing=false, prop=false, step=1, direction='up', maxstep=1, unit='px', done=false) {
-    // yeah I know its global but since yum itself is global and if not used with new then this is the only way the queue will work
-    window.yumfxq = window.yumfxq || [];
-    window.yumintv = window.yumintv || ''; // this must be on window in order to use stop
-
-    // for simulationeos animations without using a passed in function (or a passed in function of the same name)
-    const lockname = fn.name;
-
-    // if there was an option to run independent animations when no fn passed in then uncomment this to assign a uniq lockname when so that each function runs in fifo sequence
-    // if(lockname === 'fn'){
-    // lockname = _uuidv4();
-    // console.log('lockname is '+lockname);
-    // }
-
-    if (!el.lock || el.lock === 'yumjs' ) {
-      el.lock = lockname;
-    }
-
-    if (el.lock !== lockname) {
-      window.yumfxq.push( {el: el, fn: fn, speed: speed, iterations: iterations, easing: easing, prop: prop, step: step, direction: 'up', maxstep: maxstep, unit: unit, done: done});
-    }
-
-    if (el.lock === lockname) {
-      // using setInterval
-
-      // attach speed to the el so we can short circuit it from the outside
-      el.speed = speed;
-      el.origspeed = speed;
-      // if speed changes during a run this is how we will know
-      let tmpspeed = speed;
-
-
-      el.run = 'no';
-      let i = 0;
-      function run() {
-        // check if current function has finished
-        if (el.run === 'no') {
-          el.run = 'yes';
-          i++;
-
-
-          // we don't want speed to ever be below 0 (when doing negative numbers ) so set to 10 to be safe
-          if (el.speed < 10) {
-            el.speed = 10;
-          }
-          // if speed changes during a run this is how we will know
-          if (tmpspeed != el.speed) {
-            tmpspeed = el.speed;
-            clearInterval(window.yumintv);
-            window.yumintv = setInterval( (t) => {
-              run();
-            }, el.speed);
-          }
-
-
-          // EFFECTS
-          // EASING
-          // TODO add other easing types here
-          // console.log('easing is '+easing);
-          // fast
-          // start half way through
-          if (easing === 'fast' && i > (iterations/2) ) {
-            clearInterval(window.yumintv);
-            el.speed = 10;
-            window.yumintv = setInterval( (t) => {
-              run();
-            }, el.speed);
-          }
-          // moderate
-          if (easing === 'moderate' && i > (iterations/2) ) {
-            clearInterval(window.yumintv);
-            el.speed = 100;
-            window.yumintv = setInterval( (t) => {
-              run();
-            }, el.speed);
-          }
-
-
-          // slow
-          if (easing === 'slow' && i > (iterations - (iterations/2)) ) {
-            clearInterval(window.yumintv);
-            el.speed = 300;
-            window.yumintv = setInterval( (t) => {
-              run();
-            }, el.speed);
-          }
-
-
-          // RULES for Specific properties to animate
-          if (prop) {
-            // OPACITY animates based on decimal less than 1
-            let result;
-            if (prop === 'opacity') {
-              if (step >= 1) { // no funny business
-                step = 0.1;
-              }
-              // console.log('direction is '+direction);
-              result = yum()._cs(el, 'opacity');
-              if (direction === 'down' ) {
-                console.log('result is '+result);
-                if (result > 0) {
-                  result = result - step;
-                }
-              } else { // up
-                if (result < 1) {
-                  result = result + step;
-                }
-              }
-              yum(el).css(` ${prop}: ${result}${unit}; `);
-            } // end if prop is opacity
-          }// end props
-
-
-          // END EFFECTS
-
-          fn(el, i);
-          // fn has finished
-          el.run = 'no';
-        }
-        // console.log('ran')
-        if (i >= iterations) {
-          i = 0;
-          clearInterval(window.yumintv);
-          el.lock = 'yumjs';
-          if (isFunction(done)) {
-            done(el);
-          }
-          q();
-        }
-      } // end run
-
-      window.yumintv = setInterval( (t) => {
-        run();
-      }, speed);
-
-      window.onblur = function() {
-        // console.log('blurred');
-        clearInterval(window.yumintv);
-      };
-    } // el .lock if
-  }// end fq
-
-
   function fadeOut(delay=500) {
     setTimeout((t) => {
       for (const y of _stk) {
@@ -2316,7 +2124,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     fadeOut: fadeOut,
     ready: ready,
     delay: delay,
-    delayfq: delayfq,
     plug: plug,
     spy: spy,
     unspy: unspy,
@@ -2331,9 +2138,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     _camelDash: _camelDash,
     _getAtPt: _getAtPt,
     fn: fn,
-    fxq: fxq,
-    stop: stop,
-    clearfxq: clearfxq,
     _cs: _cs,
   };
 
