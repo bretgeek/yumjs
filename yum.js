@@ -1866,15 +1866,16 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           fn(e, time, step); // the plugged in function gets passed these params but you don't have to use them
         }, time);
       }
-      const farr = [];
+      
+    e.farr = e.farr || [];
       if (iterate > 1) {
         for (let i = 0; i < iterate; i++) {
-          farr.push(fn);
+          e.farr.push(fn);
         }
       }
       let pinc = 0;
-      if (farr.length) {
-        for (f of farr) {
+      if (e.farr.length) {
+        for (f of e.farr) {
           if (pinc > 0 ) {
             time = time * 2;
           }
@@ -1884,7 +1885,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
        intv = setInterval((t)=>{
             console.log('iterating');
             f(e, time, step);
-              if(pinc >= farr.length){
+              if(pinc >= e.farr.length){
                 clearInterval(intv)
               }
           }, time);
