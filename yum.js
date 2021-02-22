@@ -1887,9 +1887,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             f(e,  delay, step);
               if(pinc >= e.farr.length){
                 clearInterval(intv)
-                if(isFunction(done)){
-                  done(e,  delay, step);
-                }
               }
           },  delay);
     window.onblur = function() {
