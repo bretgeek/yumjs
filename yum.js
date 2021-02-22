@@ -1863,7 +1863,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       if (iterate <= 1) {
         setTimeout((t)=>{
           // console.log(`running ${ delay} with ${step}`)
-          fn(e,  delay, step); // the plugged in function gets passed these params but you don't have to use them
+          fn(e, step); // the plugged in function gets passed these params but you don't have to use them
         },  delay);
       }
       
@@ -1883,8 +1883,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
        let intv;
        intv = setInterval((t)=>{
-            console.log('iterating');
-            f(e,  delay, step);
+            // console.log('iterating');
+            f(e, step);
               if(pinc >= e.farr.length){
                 clearInterval(intv)
               }
