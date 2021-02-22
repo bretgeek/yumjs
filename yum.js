@@ -1857,14 +1857,17 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // PLUGIN
-  function plug(fn) {
-    for ( const x of _stk) {
-      fn(x);
+  function plug(fn, time=10, step=1) { 
+    for ( const e of _stk) {
+       setTimeout(t=>{
+          //console.log(`running ${time} with ${step}`)
+          fn(e,time,step); // the plugged in function gets passed these params but you don't have to use them
+       },time);
     }
     return this;
   }
 
-  // same as plug but without plugvar and return value ret
+  // same as plug but without time
   function fn(f) {
     f(_stk);
     return this;
