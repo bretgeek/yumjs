@@ -519,11 +519,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         const dropped = document.querySelector(drop);
         const drp = _data(e.target, 'dropping', 'get');
         if (drp) {
-           // console.log('GOT '+drp);
+          // console.log('GOT '+drp);
           if (isFunction(drpfn)) {
             // console.log('drpfn should run');
             if (dropped) {
-              drpfn(dropped,e.target);
+              drpfn(dropped, e.target);
             }
           }
         }// end if drp
@@ -573,8 +573,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       cont = document.documentElement || document.querySelector('body') || window;
     }
     // the container must be static and it's parents must be static
-    //yum(cont).css('position: static;');
-    
+    // yum(cont).css('position: static;');
+
     // Cutoff and adjust shift for margins
     let shiftLR = 0;
     const shiftArr = __getM(dragee);
@@ -790,8 +790,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
                 if (isFunction(drpfn)) {
                   // console.log('drpfn should run');
                   if (dropped) {
-              //      drpfn(dropped,e);
-              drpfn(dropped,e.target);
+                    //      drpfn(dropped,e);
+                    drpfn(dropped, e.target);
                   }
                 }
               }// end if drp
@@ -799,8 +799,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               if (!drp) {
                 if (isFunction(lvupfn)) {
                   if (dropped) {
-              //      lvupfn(dropped);
-                      lvupfn(dropped, e.target);
+                    //      lvupfn(dropped);
+                    lvupfn(dropped, e.target);
                   }
                 }
               }// end not drp
@@ -1857,12 +1857,34 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // PLUGIN
-  function plug(fn, time=10, step=1) { 
+  // function plug(fn, time=10, step=1, iterate=1) {
+  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) {
     for ( const e of _stk) {
-       setTimeout(t=>{
-          //console.log(`running ${time} with ${step}`)
-          fn(e,time,step); // the plugged in function gets passed these params but you don't have to use them
-       },time);
+      if (iterate <= 1) {
+        setTimeout((t)=>{
+          // console.log(`running ${time} with ${step}`)
+          fn(e, time, step); // the plugged in function gets passed these params but you don't have to use them
+        }, time);
+      }
+      const farr = [];
+      if (iterate > 1) {
+        for (let i = 0; i < iterate; i++) {
+          farr.push(fn);
+        }
+      }
+      let pinc = 0;
+      if (farr.length) {
+        for (f of farr) {
+          if (pinc > 0 ) {
+            time = time * 2;
+          }
+          pinc++;
+          setTimeout((t)=>{
+            console.log('iterating');
+            f(e, time, step);
+          }, time);
+        }
+      }
     }
     return this;
   }
@@ -2033,10 +2055,10 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     }
 
     if (isFunction(h.ready)) {
-      yum(document).ready( function(){
-      h.ready();
+      yum(document).ready( function() {
+        h.ready();
       });
-    } 
+    }
 
     if (isFunction(h.react)) {
       yum(h).ReactTo(h, fn.name, h.react, state);
