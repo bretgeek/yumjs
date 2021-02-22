@@ -526,11 +526,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         const dropped = document.querySelector(drop);
         const drp = _data(e.target, 'dropping', 'get');
         if (drp) {
-          // console.log('GOT '+drp);
+           console.log('GOT '+drp);
           if (isFunction(drpfn)) {
             // console.log('drpfn should run');
             if (dropped) {
-              drpfn(dropped);
+              drpfn(dropped,e.target);
             }
           }
         }// end if drp
@@ -538,7 +538,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         if (!drp) {
           if (isFunction(lvupfn)) {
             if (dropped) {
-              lvupfn(dropped);
+              lvupfn(dropped, e.target);
             }
           }
         }// end not drp
@@ -579,8 +579,9 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       // prevent from going off screen
       cont = document.documentElement || document.querySelector('body') || window;
     }
-
-
+    // the container must be static and it's parents must be static
+    //yum(cont).css('position: static;');
+    
     // Cutoff and adjust shift for margins
     let shiftLR = 0;
     const shiftArr = __getM(dragee);
@@ -796,7 +797,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
                 if (isFunction(drpfn)) {
                   // console.log('drpfn should run');
                   if (dropped) {
-                    drpfn(dropped);
+              //      drpfn(dropped,e);
+              drpfn(dropped,e.target);
                   }
                 }
               }// end if drp
@@ -804,7 +806,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
               if (!drp) {
                 if (isFunction(lvupfn)) {
                   if (dropped) {
-                    lvupfn(dropped);
+              //      lvupfn(dropped);
+                      lvupfn(dropped, e.target);
                   }
                 }
               }// end not drp
