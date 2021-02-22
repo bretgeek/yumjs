@@ -526,7 +526,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         const dropped = document.querySelector(drop);
         const drp = _data(e.target, 'dropping', 'get');
         if (drp) {
-           console.log('GOT '+drp);
+           // console.log('GOT '+drp);
           if (isFunction(drpfn)) {
             // console.log('drpfn should run');
             if (dropped) {
