@@ -1856,32 +1856,43 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
+
+    function clearfx(){
+      for ( const y of _stk) {
+      y.farr = [];
+      y.lock = false;
+      y.step = 0;
+      }
+
+    return this;
+    }
+
   // PLUGIN
   // function plug(fn, time=10, step=1, iterate=1) {
-function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) { 
-    for ( const e of _stk) {
-      e.lock = e.lock || false;
-      e.farr = e.farr || [];
+  function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) { 
+    for ( const y of _stk) {
+      y.lock = y.lock || false;
+      y.farr = y.farr || [];
       
     for (let i = 0; i < iterate; i++) {
-          e.farr.push(fn);
+          y.farr.push(fn);
         }    
           
 
-      if (e.farr.length && !e.lock ) {
-        e.lock = true;
+      if (y.farr.length && !y.lock ) {
+        y.lock = true;
         let intv;
         intv = setInterval((t)=>{
           // console.log('iterating');
-          e.step = e.step || step;
-          if (!e.farr.length) {
+          y.step = y.step || step;
+          if (!y.farr.length) {
             clearInterval(intv);
-            e.lock = false;
-            e.step = 0; 
+            y.lock = false;
+            y.step = 0; 
           }    
-          if (e.farr.length) {
-            e.farr[0](e, step);
-            e.farr.shift();
+          if (y.farr.length) {
+            y.farr[0](y, step);
+            y.farr.shift();
             // console.log('len is '+e.farr.length);
           }    
         }, delay);
@@ -2157,6 +2168,7 @@ function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) {
     delay: delay,
     plug: plug,
     fx: plug,
+    clearfx: clearfx,
     spy: spy,
     unspy: unspy,
     trigger: trigger,
