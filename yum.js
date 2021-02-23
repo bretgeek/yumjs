@@ -1858,36 +1858,42 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // PLUGIN
   // function plug(fn, time=10, step=1, iterate=1) {
-  function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) {
+function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) { 
     for ( const e of _stk) {
-     e.farr = e.farr || [];
-        for (let i = 0; i < iterate; i++) {
+      e.lock = e.lock || false;
+      e.farr = e.farr || [];
+      
+    for (let i = 0; i < iterate; i++) {
           e.farr.push(fn);
-        }
+        }    
+          
 
-      if (e.farr.length ) {
+      if (e.farr.length && !e.lock ) {
+        e.lock = true;
         let intv;
         intv = setInterval((t)=>{
           // console.log('iterating');
           e.step = e.step || step;
           if (!e.farr.length) {
             clearInterval(intv);
-            e.step = 0;
-            e.lock = 'no';
-          }
+            e.lock = false;
+            e.step = 0; 
+          }    
           if (e.farr.length) {
             e.farr[0](e, step);
             e.farr.shift();
             // console.log('len is '+e.farr.length);
-          }
+          }    
         }, delay);
         window.onblur = function() {
           clearInterval(intv);
-        };
-      }
-    }
+        };   
+      }    
+    }    
     return this;
   }
+
+
 
   // bare bones plug
   function fn(f) {
