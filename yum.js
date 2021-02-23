@@ -1860,25 +1860,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // function plug(fn, time=10, step=1, iterate=1) {
   function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) {
     for ( const e of _stk) {
-      e.lock = e.lock || false;
-
-      if (iterate <= 1) {
-        setTimeout((t)=>{
-          // console.log(`running ${ delay} with ${step}`)
-          e.step = e.step || step;
-          fn(e, step); // the plugged in function gets passed these params but you don't have to use them
-        }, delay);
-      }
-
-      e.farr = e.farr || [];
-      if (iterate > 1) {
+     e.farr = e.farr || [];
         for (let i = 0; i < iterate; i++) {
           e.farr.push(fn);
         }
-      }
 
-      if (e.farr.length && !e.lock ) {
-        e.lock = true;
+      if (e.farr.length ) {
         let intv;
         intv = setInterval((t)=>{
           // console.log('iterating');
@@ -1886,6 +1873,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           if (!e.farr.length) {
             clearInterval(intv);
             e.step = 0;
+            e.lock = 'no';
           }
           if (e.farr.length) {
             e.farr[0](e, step);
@@ -1901,7 +1889,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  // same as plug but without time
+  // bare bones plug
   function fn(f) {
     f(_stk);
     return this;
