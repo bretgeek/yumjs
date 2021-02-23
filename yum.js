@@ -1860,9 +1860,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   // function plug(fn, time=10, step=1, iterate=1) {
   function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) {
     for ( const e of _stk) {
+      e.lock = e.lock || false;
+
       if (iterate <= 1) {
         setTimeout((t)=>{
           // console.log(`running ${ delay} with ${step}`)
+          e.step = e.step || step;
           fn(e, step); // the plugged in function gets passed these params but you don't have to use them
         }, delay);
       }
@@ -1874,7 +1877,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         }
       }
 
-      if (e.farr.length) {
+      if (e.farr.length && !e.lock ) {
+        e.lock = true;
         let intv;
         intv = setInterval((t)=>{
           // console.log('iterating');
