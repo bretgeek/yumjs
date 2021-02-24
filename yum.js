@@ -1,5 +1,4 @@
 function yum(itr, ...Arr) {// itr = strings of things to iterate over
-  // components can have non global yumobservers - see spy
   globalThis.yumobservers = globalThis.yumobservers || {};
 
   let itrtemp; // for saving itr
