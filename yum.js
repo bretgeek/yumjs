@@ -1858,58 +1858,58 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
 
-    function clearfx(){
-      for ( const y of _stk) {
+  function clearfx() {
+    for ( const y of _stk) {
       y.farr = [];
       y.lock = false;
       y.step = 0;
-      }
-
-    return this;
     }
 
-  // PLUGIN
-  // function plug(fn, time=10, step=1, iterate=1) {
-  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) { 
-    for ( const y of _stk) {
-      y.lock = y.lock || false;
-      y.farr = y.farr || [];
-      
-    for (let i = 0; i < iterate; i++) {
-          y.farr.push(fn);
-        }    
-          
-
-      if (y.farr.length && !y.lock ) {
-        y.lock = true;
-        let intv;
-        intv = setInterval((t)=>{
-          // console.log('iterating');
-          y.step = y.step || step;
-          if (!y.farr.length) {
-            clearInterval(intv);
-            y.lock = false;
-            y.step = 0; 
-          }    
-          if (y.farr.length) {
-            y.farr[0](y, step);
-            y.farr.shift();
-           // in the case where there are 1 or less iterations we must unlock 
-           if(iterate <= 1){
-            y.step = 0; 
-           }
-            // console.log('len is '+e.farr.length);
-          }    
-        }, time);
-        window.onblur = function() {
-          clearInterval(intv);
-        };   
-      }    
-    }    
     return this;
   }
 
+  // PLUGIN
+  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) {
+    let count = 0;
+    for ( const y of _stk) {
+      y.lock = y.lock || false; // Performing an external check if lock exists can be used to block events until the lock is cleared
+      let ttime = time; // temp time
+      if (iterate > 1) {
+        const tarr = [...Array(iterate).keys()];
+        console.log(`tarr is  ${tarr}`);
+        for (let i of tarr) {
+          i += 1;
+          ttime = time* Number(i);
+          // console.log(`time is ${ttime}`)
+          y.count = count++;
+          q(y, fn, ttime, step, iterate);
+        }
+      } else {
+        y.count = count++;
+        q(y, fn, ttime, step, iterate);
+      }
+    }
+    return this;
+  }
 
+  function q(y, fnc, time, step, iterate) {
+    y.lock = true;
+
+    let intv;
+    intv = setInterval((t)=>{
+      // console.log('iterating');
+      fnc(y, time, step);
+      y.count--;
+      if (y.count <= 0) {
+        y.lock = false;
+      }
+      clearInterval(intv);
+    }, time);
+
+    window.onblur = function() {
+      clearInterval(intv);
+    };
+  }
 
   // bare bones plug
   function fn(f) {
