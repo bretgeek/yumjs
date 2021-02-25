@@ -1882,12 +1882,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
           i += 1;
           ttime = time* Number(i);
           // console.log(`time is ${ttime}`)
-          y.count = count++;
           q(y, fn, ttime, y.step, iterate);
+          y.count = count++;
         }
       } else {
-        y.count = count++;
         q(y, fn, ttime, y.step, iterate);
+        y.count = count++;
       }
     }
     return this;
