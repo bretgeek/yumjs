@@ -1898,7 +1898,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     let intv;
     intv = setInterval((t)=>{
       // console.log('iterating');
-      fnc(y, time, step);
+      fnc(y, step);
       y.count--;
       if (y.count <= 0) {
         y.lock = false;
