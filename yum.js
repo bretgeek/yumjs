@@ -1869,7 +1869,8 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   }
 
   // PLUGIN
-  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) {
+  // time is the distance away from each subsequent fx chains on the same element. If incTime set is used to specify the distance between iterations and if not set time is used
+  function plug(fn, {time = 10, step = 1, iterate = 1 , incTime = 0 } = 1) {
     let count = 0;
     for ( const y of _stk) {
       y.lock = y.lock || false; // Performing an external check if lock exists can be used to block events until the lock is cleared
@@ -1880,8 +1881,12 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         console.log(`tarr is  ${tarr}`);
         for (let i of tarr) {
           i += 1;
-          ttime = time* Number(i);
-          // console.log(`time is ${ttime}`)
+          if(incTime){
+          ttime = time + (Number(incTime) * i);
+          }else {
+          ttime = time * Number(i);
+           }
+           console.log(`time is ${ttime}`)
           q(y, fn, ttime, y.step, iterate);
           y.count = count++;
         }
