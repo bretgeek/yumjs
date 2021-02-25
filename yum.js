@@ -1875,7 +1875,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
       y.lock = y.lock || false; // Performing an external check if lock exists can be used to block events until the lock is cleared
       y.step = step;
       let ttime = time; // temp time
-      if (iterate > 1) {
+      if (iterate >= 1) {
         const tarr = [...Array(iterate).keys()];
         console.log(`tarr is  ${tarr}`);
         for (let i of tarr) {
