@@ -1896,7 +1896,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
             y.farr.shift();
            // in the case where there are 1 or less iterations we must unlock 
            if(iterate <= 1){
-            y.lock = false;
             y.step = 0; 
            }
             // console.log('len is '+e.farr.length);
