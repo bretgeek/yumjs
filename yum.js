@@ -1,4 +1,6 @@
 function yum(itr, ...Arr) {// itr = strings of things to iterate over
+// components can have non global yumobservers - see spy
+
   globalThis.yumobservers = globalThis.yumobservers || {};
 
   let itrtemp; // for saving itr
@@ -1868,7 +1870,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
   // PLUGIN
   // function plug(fn, time=10, step=1, iterate=1) {
-  function plug(fn, {delay = 10, step = 1, iterate = 1} = 1) { 
+  function plug(fn, {time = 10, step = 1, iterate = 1} = 1) { 
     for ( const y of _stk) {
       y.lock = y.lock || false;
       y.farr = y.farr || [];
@@ -1899,7 +1901,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
            }
             // console.log('len is '+e.farr.length);
           }    
-        }, delay);
+        }, time);
         window.onblur = function() {
           clearInterval(intv);
         };   
