@@ -1889,11 +1889,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
            if(logTime){
            console.log(`time is ${ttime}`)
            }
-          q(y, fn, ttime, y.step, i);
+          q(y, fn, ttime, y.step, iterate);
           y.count = count++;
         }
       } else {
-        q(y, fn, ttime, y.step);
+        q(y, fn, ttime, y.step, iterate);
         y.count = count++;
       }
     }
