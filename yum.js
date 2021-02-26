@@ -1904,15 +1904,16 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
   function q(y, fnc, time, step, itr=0, raf) {
     y.lock = true;
 
+    let rAF;
     if (raf) {
-      const RAF = (
+       rAF = (
         window.requestAnimationFrame ||
            window.mozRequestAnimationFrame ||
            window.webkitRequestAnimationFrame ||
            window.msRequestAnimationFrame || false
       );
 
-      if (!RAF) {
+      if (!rAF) {
       //  console.log('no RAF so defaulting to setInterval');
         raf = false;
       }
@@ -1923,10 +1924,11 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     intv = setInterval((t)=>{
       // console.log('iterating');
       if (raf) {
+       // console.log('rAFing');
         function dofnc() {
           fnc(y, step, itr);
         }
-        requestAnimationFrame(dofnc);
+        rAF(dofnc);
       } else {
         fnc(y, step, itr);
       }
