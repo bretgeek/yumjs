@@ -1,4 +1,4 @@
-function yum(itr, ...Arr) {// itr = strings of things to iterate over
+function yum(itr, ...Arr) {  // itr is things to iterate over
 // components can have non global yumobservers - see spy
 
   globalThis.yumobservers = globalThis.yumobservers || {};
@@ -1434,7 +1434,6 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
         }
 
         if (hid) {
-          // call fade with params and single as s
             s.visibility = 'visible';
             s.style.opacity = 1;
             s.style.display = dtype;
