@@ -1414,7 +1414,7 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
     return this;
   }
 
-  function toggle(dtype='block', d = false) {
+  function toggle(dtype='block') {
     for ( const s of _stk) {
       if (!s.matches('body')) { // no toggling on the body in case the selector is invalid
         let hid = false;
@@ -1435,23 +1435,15 @@ function yum(itr, ...Arr) {// itr = strings of things to iterate over
 
         if (hid) {
           // call fade with params and single as s
-          if (d) {
-            fade(d, dtype, true, [s]);// fade in single
-          } else {
             s.visibility = 'visible';
             s.style.opacity = 1;
             s.style.display = dtype;
-          }
         }
 
         if (!hid) {
-          if (d) {
-            fade(d, dtype, false, [s]);// fade out single
-          } else {
             s.style.opacity = 0;
             s.visibility = 'hidden';
             s.style.display = dtype;
-          }
         }
       }
     }
