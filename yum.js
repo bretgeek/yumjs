@@ -1609,22 +1609,28 @@ function yum(itr, ...Arr) {  // itr is things to iterate over
     }
   }
 
-  function show() {
+
+
+
+  function show(dtype='block', op=1, v='visible') {
     for ( const y of _stk) {
-      y.style.visibility = 'visible';
-      if (getComputedStyle(y).display === 'none') {
-        y.style.display = 'block';
-      }
+      y.style.visibility = v;
+       y.style.display = dtype;
+        y.style.opacity = op;
     }
     return this;
   }
 
-  function hide() {
+  function hide(dtype='none', op=1, v='hidden') {
     for ( const y of _stk) {
-      y.style.visibility = 'hidden';
+      y.style.visibility = v;
+       y.style.display = dtype;
+        y.style.opacity = op;
     }
     return this;
   }
+
+
 
 
   // PARENT for each element in the stack put each direct parent on the stack and subsequent chains will act on the parent/s - if You want to return the collection chain with ._ or .first to return the first parent of the stack
