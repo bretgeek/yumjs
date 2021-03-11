@@ -841,7 +841,7 @@ function yum(itr, ...Arr) {  // itr is things to iterate over
       };// endonMouseOver
 
       document.addEventListener('mousemove', onMouseMove, true);
-      // remove lister if dragee mouse up
+      // remove listener if dragee mouse up
       dragee.onmouseup = function() {
         // console.log('remove listener');
         document.removeEventListener('mousemove', onMouseMove, true);
@@ -849,7 +849,7 @@ function yum(itr, ...Arr) {  // itr is things to iterate over
       };
 
 
-      // remove lister if handle mouse up
+      // remove listener if handle mouse up
       el.onmouseup = function() {
         document.removeEventListener('mousemove', onMouseMove, true);
         el.onmouseup = null;
