@@ -568,7 +568,9 @@ function yum(itr, ...Arr) {  // itr is things to iterate over
     let cont = contain;
     // the container as an element need for getting dimensions
     if (cont) {
+      if(cont !== 'no'){
       cont = document.querySelector(contain);
+      }
     } else {
       // prevent from going off screen
       cont = document.documentElement || document.querySelector('body') || window;
