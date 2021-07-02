@@ -1,5 +1,8 @@
 [![GitHub Logo](/images/yumlogo.png)](https://yumjs.net/)
 
+# Depreciated
+see https://github.com/bretgeek/VibeJS
+
 # YumJS
 YumJS is a small reactive JavaScript library with JQuery like syntax. 
 
