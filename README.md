@@ -1,6 +1,6 @@
 [![GitHub Logo](/images/yumlogo.png)](https://yumjs.net/)
 
-# Depreciated
+# Deprecated
 see https://github.com/bretgeek/VibeJS
 
 # YumJS
