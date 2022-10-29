@@ -1,14 +1,14 @@
-[![GitHub Logo](/images/yumlogo.png)](https://yumjs.net/)
+
 
 # Deprecated
-see https://github.com/bretgeek/VibeJS
+see https://github.com/bretgeek/surf
 
 # YumJS
 YumJS is a small reactive JavaScript library with JQuery like syntax. 
 
 Small as in ~19KB minified with drag ~15KB minified without drag and about half of that if served gzipped.
 
-Please see https://yumjs.net for ongoing documentation, minified downloads and optional builds.
+Please see https://surf.monster for ongoing documentation, minified downloads and optional builds.
 
 
 Yum provides a familiar **procedural** and a **component** based syntax with low overhead and a slice of delicious reactivity when you need it.
